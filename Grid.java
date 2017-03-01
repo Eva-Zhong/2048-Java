@@ -1,3 +1,4 @@
+
 /**
  * Created by Kaixing on 2/25/2017.
  */
@@ -60,6 +61,12 @@ public class Grid {
             this.setNumber(0);
         }
     }
+    public Grid clone(){
+        Grid grid = new Grid();
+        grid.setDisplay(getDisplay());
+        grid.setNumber(getNumber());
+        grid.setxLocation(getxLocation());
+        grid.setyLocation(getyLocation());
+        return grid;
+    }
 }
-
-

@@ -1,0 +1,22 @@
+.alert{
+    -fx-background-color: gold;
+}
+
+.alert .button{
+    -fx-background-color: #fff8d2;
+    -fx-text-fill: gold;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.alert > *.label.content{
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #fff8d2;
+}
+
+.alert .button:hover{
+    -fx-background-color:white;
+    -fx-text-fill: gold;
+    -fx-font-weight:bold;
+}

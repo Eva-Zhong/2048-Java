@@ -1,0 +1,59 @@
+.root {
+    /*-fx-background-image: url("Fantasy-Sky-Step2d.jpg");
+    -fx-background-color: #f2c615;
+    */
+    -fx-background-image: url("3.png");
+    -fx-background-color:
+            linear-gradient(to bottom right, #ddc500, #fff8d2);
+}
+
+.newtile {
+
+    -fx-font-size: 15px;
+    -fx-background-color: rgba(150,180,210,0.6);
+
+}
+
+#score {
+    -fx-font-size: 24px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: normal;
+    -fx-fill: #fff8d2;
+    -fx-background-radius: 10;
+    -fx-text-alignment: center;
+ }
+
+#level{
+    -fx-font-size: 24px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: normal;
+    -fx-fill: #fff8d2;
+}
+
+#gametitle {
+    -fx-font-size: 54px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: bold;
+    -fx-fill: rgba(122, 122, 0, 0.4);
+}
+
+#tileLable {
+    -fx-font-size: 30px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: normal;
+}
+
+.rectangle {
+    -fx-background-color: rgba(230,200,40,0.5)
+}
+
+.button {
+    -fx-font-size: 20px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: bold;
+    -fx-text-fill: #fbfbfb;
+    -fx-background-radius: 10;
+    -fx-background-color: rgba(245,216,88,0.5);
+}
+
+

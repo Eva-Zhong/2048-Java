@@ -287,7 +287,7 @@ public class Gamepage extends Application{
 
     private Node newGameButton() {
 
-        WelcomeHelp welcomehelp = new WelcomeHelp();
+        MainPage mainpage = new MainPage();
 
         StackPane newGamePane = new StackPane();
         newGamePane.setId("newGamePane");
@@ -302,7 +302,7 @@ public class Gamepage extends Application{
             @Override
             public void handle(ActionEvent event) {
 
-                Stage newstage = welcomehelp.getStage();
+                Stage newstage = mainpage.getStage();
                 newstage.show();
                 stage.close();
 

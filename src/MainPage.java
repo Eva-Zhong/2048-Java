@@ -25,7 +25,7 @@ import javafx.scene.image.ImageView;
 import java.util.Optional;
 
 //create 2 scenes, one for welcome page and the other for help page
-public class WelcomeHelp extends Application{
+public class MainPage extends Application{
     public static final double MIN_BUTTON_HEIGHT = 100;
     public static final double MIN_BUTTON_WIDTH = 100;
     private Stage stage;
@@ -40,9 +40,9 @@ public class WelcomeHelp extends Application{
         BorderPane helpRoot = new BorderPane();
         helpRoot.setCenter(helpAddGridPane());
         sceneWelcome = new Scene(welcomeRoot,1200,800);
-        sceneWelcome.getStylesheets().add(WelcomeHelp.class.getResource("WelcomePage.css").toExternalForm());
+        sceneWelcome.getStylesheets().add(MainPage.class.getResource("WelcomePage.css").toExternalForm());
         sceneHelp = new Scene(helpRoot,1200,800);
-        sceneHelp.getStylesheets().add(WelcomePage.class.getResource("Help.css").toExternalForm());
+        sceneHelp.getStylesheets().add(MainPage.class.getResource("Help.css").toExternalForm());
         stage.setTitle("GAME 2048");
         stage.setScene(sceneWelcome);
         stage.show();
@@ -55,9 +55,9 @@ public class WelcomeHelp extends Application{
         BorderPane helpRoot = new BorderPane();
         helpRoot.setCenter(helpAddGridPane());
         sceneWelcome = new Scene(welcomeRoot,1200,800);
-        sceneWelcome.getStylesheets().add(WelcomeHelp.class.getResource("WelcomePage.css").toExternalForm());
+        sceneWelcome.getStylesheets().add(MainPage.class.getResource("WelcomePage.css").toExternalForm());
         sceneHelp = new Scene(helpRoot,1200,800);
-        sceneHelp.getStylesheets().add(WelcomePage.class.getResource("Help.css").toExternalForm());
+        sceneHelp.getStylesheets().add(MainPage.class.getResource("Help.css").toExternalForm());
         stage = new Stage();
         stage.setTitle("GAME 2048");
         stage.setScene(sceneWelcome);
@@ -86,7 +86,9 @@ public class WelcomeHelp extends Application{
         buttonPane.setHgap(5);
         buttonPane.setVgap(5);
         buttonPane.setPadding(new Insets(0,10,0,10));
-		Gamepage gamepage = new Gamepage();
+
+		/*Gamepage gamepage = new Gamepage();
+
         Button level1 = new Button("Level 1");
         level1.setMinHeight(MIN_BUTTON_HEIGHT);
         level1.setMinWidth(MIN_BUTTON_WIDTH);
@@ -129,11 +131,30 @@ public class WelcomeHelp extends Application{
                 stage.close();
             }
         });
-        buttonPane.add(level1,0,12);
-        buttonPane.add(level2,1,12);
-        buttonPane.add(level3,2,12);
+        */
+        buttonPane.add(createLevelButton("Level1"),0,12);
+        buttonPane.add(createLevelButton("Level2"),1,12);
+        buttonPane.add(createLevelButton("Level3"),2,12);
         buttonPane.setGridLinesVisible(false);
         return buttonPane;
+    }
+
+    private Button createLevelButton(String level){
+        Gamepage gamepage = new Gamepage();
+        Button button = new Button(level);
+        button.setMinHeight(MIN_BUTTON_HEIGHT);
+        button.setMinWidth(MIN_BUTTON_WIDTH);
+        button.setId(level);
+
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                gamepage.setLevel(level);
+                Stage newstage = gamepage.getStage();
+                stage.close();
+            }
+        });
+        return button;
     }
 
 	//game title of welcome page
@@ -195,8 +216,6 @@ public class WelcomeHelp extends Application{
     public Node helpAddStackPane(){
         StackPane stack = new StackPane();
         Button button = new Button("⏎");
-
-        WelcomePage welcomepage = new WelcomePage();
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -213,7 +232,7 @@ public class WelcomeHelp extends Application{
         hbox.setSpacing(2);
         Text text1 = new Text("Goal:");
         text1.setId("text");
-        ImageView image1 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("2048.png")));
+        ImageView image1 = new ImageView(new Image(MainPage.class.getResourceAsStream("2048.png")));
         image1.setFitHeight(55);
         image1.setFitWidth(55);
         hbox.getChildren().addAll(text1,image1);
@@ -226,7 +245,7 @@ public class WelcomeHelp extends Application{
         hbox.setSpacing(2);
         Text text2 = new Text("Game Over:");
         text2.setId("text");
-        ImageView image2 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("gameover.jpg")));
+        ImageView image2 = new ImageView(new Image(MainPage.class.getResourceAsStream("gameover.jpg")));
         image2.setFitHeight(55);
         image2.setFitWidth(55);
         hbox.getChildren().addAll(text2,image2);
@@ -243,25 +262,25 @@ public class WelcomeHelp extends Application{
         Label label5 = new Label(" = ");
         Label label6 = new Label(", they merge into a tile of the numbers");
         Label label7 = new Label("combined.");
-        ImageView image1 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("left.png" )));
+        ImageView image1 = new ImageView(new Image(MainPage.class.getResourceAsStream("left.png" )));
         image1.setFitHeight(30);
         image1.setFitWidth(30);
-        ImageView image2 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("up.png" )));
+        ImageView image2 = new ImageView(new Image(MainPage.class.getResourceAsStream("up.png" )));
         image2.setFitHeight(30);
         image2.setFitWidth(30);
-        ImageView image3 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("down.png" )));
+        ImageView image3 = new ImageView(new Image(MainPage.class.getResourceAsStream("down.png" )));
         image3.setFitHeight(30);
         image3.setFitWidth(30);
-        ImageView image4 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("right.png" )));
+        ImageView image4 = new ImageView(new Image(MainPage.class.getResourceAsStream("right.png" )));
         image4.setFitHeight(30);
         image4.setFitWidth(30);
-        ImageView image5 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("2.png")));
+        ImageView image5 = new ImageView(new Image(MainPage.class.getResourceAsStream("2.png")));
         image5.setFitHeight(30);
         image5.setFitWidth(30);
-        ImageView image6 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("2.png")));
+        ImageView image6 = new ImageView(new Image(MainPage.class.getResourceAsStream("2.png")));
         image6.setFitHeight(30);
         image6.setFitWidth(30);
-        ImageView image7 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("4.png")));
+        ImageView image7 = new ImageView(new Image(MainPage.class.getResourceAsStream("4.png")));
         image7.setFitHeight(30);
         image7.setFitWidth(30);
         flow.getChildren().addAll(label1,image1,image2,image3,image4,label2,label3,image5,label4, image6,label5,image7,label6,label7);
@@ -274,7 +293,7 @@ public class WelcomeHelp extends Application{
         Label label1 = new Label("Level 2 (Gravity): When the 512 tile ");
         Label label2 = new Label(" appears, the");
         Label label3 = new Label("grid rotates 90 degrees to the left and all tiles fall down.");
-        ImageView image1 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("512.png")));
+        ImageView image1 = new ImageView(new Image(MainPage.class.getResourceAsStream("512.png")));
         image1.setFitHeight(30);
         image1.setFitWidth(30);
         flow.getChildren().addAll(label1,image1,label2,label3);
@@ -286,10 +305,10 @@ public class WelcomeHelp extends Application{
         HBox hbox = new HBox();
         Label label = new Label(" ⇒ ");
         label.setId("labelarrow");
-        ImageView image1 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("gravity1.png")));
+        ImageView image1 = new ImageView(new Image(MainPage.class.getResourceAsStream("gravity1.png")));
         image1.setFitHeight(80);
         image1.setFitWidth(80);
-        ImageView image2 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("gravity2.png")));
+        ImageView image2 = new ImageView(new Image(MainPage.class.getResourceAsStream("gravity2.png")));
         image2.setFitHeight(80);
         image2.setFitWidth(80);
         hbox.getChildren().addAll(image1,label,image2);
@@ -310,10 +329,10 @@ public class WelcomeHelp extends Application{
         HBox hbox = new HBox();
         Label label = new Label(" ⇒ ");
         label.setId("labelarrow");
-        ImageView image1 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("subtraction1.png")));
+        ImageView image1 = new ImageView(new Image(MainPage.class.getResourceAsStream("subtraction1.png")));
         image1.setFitHeight(80);
         image1.setFitWidth(80);
-        ImageView image2 = new ImageView(new Image(WelcomeHelp.class.getResourceAsStream("subtraction2.png")));
+        ImageView image2 = new ImageView(new Image(MainPage.class.getResourceAsStream("subtraction2.png")));
         image2.setFitHeight(80);
         image2.setFitWidth(80);
         hbox.getChildren().addAll(image1,label,image2);

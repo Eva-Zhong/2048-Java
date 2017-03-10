@@ -1,6 +1,5 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,10 +13,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
-
-
-import java.awt.*;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Optional;
+import java.util.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.event.EventHandler;
 
 /**
  * Created by zhonge on 3/4/17.
@@ -25,11 +27,14 @@ import java.util.Optional;
 
 public class Gamepage extends Application{
 
+    private Button[][] tileList = new Button[4][4];
+    private Board thisBoard = new Board();
     private String highestScore = "2";
     //If the user have a tile with number 2048, the highestScore will be updated to "2048", and an alert message will occur.
 
     private Stage stage;
     private String level;
+    private Scene scene;
 
 
     @Override
@@ -40,9 +45,11 @@ public class Gamepage extends Application{
         root.setCenter(addBoardPane());
         root.setTop(addTopPane());
 
-        Scene scene = new Scene(root,1200,800);
+        printTileList();
 
-        scene.getStylesheets().add
+        this.scene = new Scene(root,1200,800);
+
+        this.scene.getStylesheets().add
                 (Gamepage.class.getResource("Gamepage.css").toExternalForm());
         stage.setTitle("GAME 2048");
         stage.setScene(scene);
@@ -52,8 +59,7 @@ public class Gamepage extends Application{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             DialogPane dialog = alert.getDialogPane();
             dialog.getButtonTypes().add(ButtonType.CLOSE);
-            dialog.getStylesheets().add(
-                    getClass().getResource("Alert.css").toExternalForm());
+            dialog.getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
             dialog.getStyleClass().add("alert");
             alert.setTitle("CONGRATULATIONS!");
             dialog.setPrefSize(350,160);
@@ -70,7 +76,6 @@ public class Gamepage extends Application{
             if (ButtonType.CLOSE.equals(result.get())){
                 alert.close();
             } else {
-
             }
         }
     }
@@ -83,16 +88,15 @@ public class Gamepage extends Application{
         return this.level;
     }
 
-
     public Stage getStage() {
         BorderPane root = new BorderPane();
 
         root.setCenter(addBoardPane());
         root.setTop(addTopPane());
 
-        Scene scene = new Scene(root,1200,800);
+        this.scene = new Scene(root,1200,800);
 
-        scene.getStylesheets().add
+        this.scene.getStylesheets().add
                 (Gamepage.class.getResource("Gamepage.css").toExternalForm());
         stage = new Stage();
         stage.setTitle("GAME 2048");
@@ -101,11 +105,9 @@ public class Gamepage extends Application{
         return stage;
     }
 
-
     public Node addBoardPane() {
 
         StackPane board = new StackPane();
-
         //Create the background of the grid
         Rectangle rec = new Rectangle();
         rec.setWidth(500);
@@ -113,10 +115,10 @@ public class Gamepage extends Application{
         rec.setFill(Color.rgb(52,30,105,0.4));
 
         //Create the grid with 16 squares
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
+        GridPane boardgrid = new GridPane();
+        boardgrid.setAlignment(Pos.CENTER);
+        boardgrid.setHgap(10);
+        boardgrid.setVgap(10);
 
         int rowNum = 4;
         int colNum = 4;
@@ -130,36 +132,181 @@ public class Gamepage extends Application{
                 newtile.setHeight(110);
                 newtile.setX(50);
                 newtile.setY(50);
-                grid.add(newtile, col, row);
+                boardgrid.add(newtile, col, row);
             }
-
-            grid.setGridLinesVisible(true);
-
+            boardgrid.setGridLinesVisible(true);
         }
 
         //add both the background and the grid to the board
         board.getChildren().add(rec);
 
         //Need a function that initialize the tiles at the beginning;
-        board.getChildren().add(grid);
+        board.getChildren().add(boardgrid);
 
         //put the children at the center
         board.setAlignment(rec, Pos.CENTER);
-        board.setAlignment(grid, Pos.CENTER);
+        board.setAlignment(boardgrid, Pos.CENTER);
 
         board.setAlignment(Pos.BOTTOM_CENTER);
         board.setPadding(new Insets(0,10,20,10));
 
-        addTiles(grid, "2", 1, 1 );
+        board.getChildren().add(add16Tiles());
+
+        //addTiles(grid, "2", 1, 1 );
 
         //Need a separate function to add tiles
 
 
         return board;
-
     }
 
+    private Node add16Tiles() {
+        GridPane tileGrid = new GridPane();
+        tileGrid.setAlignment(Pos.CENTER);
+        tileGrid.setHgap(10);
+        tileGrid.setVgap(10);
 
+        int rowNum = 4;
+        int colNum = 4;
+        for (int row = 0; row < rowNum; row++) {
+            for (int col=0; col < colNum; col++) {
+
+                Button newtile = new Button("button"+row+col);
+
+                newtile.setMinWidth(110);
+                newtile.setMinHeight(110);
+                newtile.setStyle("-fx-background-color: rgba(245,216,88,0.0)");
+
+
+                tileGrid.add(newtile, col, row);
+
+                int[] keyList = {row, col};
+
+                //Print array: system.out.println(Arrays.toString(keyList));
+
+                //Put the 16 buttons in a hashmap; each button is associated with a position
+                //this.tileMap.put(keyList, newtile);
+
+                this.tileList[row][col] = newtile;
+                if (this.tileList[row][col] == null){
+                System.out.println("null"+row+col);
+                }
+                //int[] thisKey = {1,2};
+
+                //if (Arrays.equals(keyList, thisKey))  {
+                //    System.out.println("true");
+                }
+            }
+        return tileGrid;
+    }
+
+    public void updateBoard(Board aBoard) {
+        Grid[][] gridList = aBoard.getGridList();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                Grid currentGrid = gridList[i][j];
+
+                int currentNum = currentGrid.getNumber();
+
+                Button currentTile = this.tileList[i][j];
+
+                currentTile.setText(Integer.toString(currentNum));
+                
+                System.out.println(currentTile.getText());
+
+                if (currentGrid.getDisplay() == true) {
+                    currentTile.setStyle("-fx-background-color: rgba(245,216,88,0.5); -fx-font-size: 20px; -fx-font-family: 'Palatino'; -fx-text-fill: #fbfbfb");
+
+                } if (currentGrid.getDisplay() == false) {
+                    currentTile.setStyle("-fx-background-color: rgba(245, 216, 88, 0.0)");
+                }
+            }
+        }
+    }
+    public void printTileList(){
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.println(this.tileList[i][j].getText()); 
+            }
+        }
+    }
+    public void drawInitialBoard() {
+        printTileList();
+        this.thisBoard.startGame();
+        this.thisBoard.generateRandom();
+        updateBoard(this.thisBoard);
+    }
+
+    public void playLevel1() {
+        drawInitialBoard();
+
+        System.out.println("playLevel1");
+        
+        /*while (!this.thisBoard.isFull()) {
+            if(this.scene == null){
+                System.out.println("thisscene");
+            }*/
+        level1();
+        
+
+
+        // If score is 2048, alert.
+    }
+    public void level1(){
+        addKeyHandler();
+    }
+    private int addKeyHandler () {
+        Board thisBoard = this.thisBoard;
+
+        this.scene.setOnKeyPressed( new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent e) {
+                KeyCode keyCode = e.getCode();
+                if (keyCode == KeyCode.DOWN){
+                    thisBoard.rollDown();
+                    thisBoard.generateRandom();
+                    updateBoard(thisBoard);
+                    thisBoard.printBoard();
+                    if(!thisBoard.isFull()){
+                        level1();
+                    }
+
+                } else if (keyCode == KeyCode.UP) {
+                    thisBoard.rollUp();
+                    thisBoard.generateRandom();
+                    updateBoard(thisBoard);
+                    thisBoard.printBoard();
+                    if(!thisBoard.isFull()){
+                        level1();
+                    }
+
+                } else if (keyCode == KeyCode.LEFT) {
+                    thisBoard.rollLeft();
+                    thisBoard.generateRandom();
+                    updateBoard(thisBoard);
+                    thisBoard.printBoard();
+                    if(!thisBoard.isFull()){
+                        level1();
+                    }
+
+                } else if (keyCode == KeyCode.RIGHT) {
+                    thisBoard.rollRight();
+                    thisBoard.generateRandom();
+                    updateBoard(thisBoard);
+                    thisBoard.printBoard();
+                    if(!thisBoard.isFull()){
+                        level1();
+                    }
+                }
+            }
+        });
+        return 0;
+    }
+
+    //Get a keyboard input from the user; return the input;
+
+    /*
     private Node addTiles(GridPane grid, String num, int col, int row) {
         GridPane newGrid = grid;
         Button atile = new Button(num);
@@ -171,6 +318,7 @@ public class Gamepage extends Application{
 
         return newGrid;
     }
+    */
 
 
 
@@ -313,4 +461,8 @@ public class Gamepage extends Application{
 
     }
 
+    public static void main(String[] args) {
+
+
+    }
 }

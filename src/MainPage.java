@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -31,6 +32,7 @@ public class MainPage extends Application{
     private Stage stage;
     private Scene sceneWelcome;
     private Scene sceneHelp;
+
 
     @Override
     public void start(Stage primaryStage){
@@ -87,19 +89,22 @@ public class MainPage extends Application{
         buttonPane.setVgap(5);
         buttonPane.setPadding(new Insets(0,10,0,10));
 
-		/*Gamepage gamepage = new Gamepage();
+		/*
+        Gamepage gamepage = new Gamepage();
 
         Button level1 = new Button("Level 1");
         level1.setMinHeight(MIN_BUTTON_HEIGHT);
         level1.setMinWidth(MIN_BUTTON_WIDTH);
         level1.setId("level1");
-        
+        System.out.println("setID");
         level1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                gamepage.setLevel("level 1");
-                Stage newstage = gamepage.getStage();
-                stage.close();
+                //gamepage.setLevel("level 1");
+                //gamepage.playLevel1();
+                //Stage newstage = gamepage.getStage();
+                System.out.println("Hi");
+                //stage.close();
             }
         });
 
@@ -108,6 +113,7 @@ public class MainPage extends Application{
         level2.setMinHeight(MIN_BUTTON_HEIGHT);
         level2.setMinWidth(MIN_BUTTON_WIDTH);
         level2.setId("level2");
+        System.out.println("setID2222");
         level2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -132,6 +138,7 @@ public class MainPage extends Application{
             }
         });
         */
+
         buttonPane.add(createLevelButton("Level1"),0,12);
         buttonPane.add(createLevelButton("Level2"),1,12);
         buttonPane.add(createLevelButton("Level3"),2,12);
@@ -149,8 +156,12 @@ public class MainPage extends Application{
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                gamepage.setLevel(level);
                 Stage newstage = gamepage.getStage();
+                gamepage.setLevel(level);
+                if (level == "Level1") {
+                    System.out.println("playLevel1111");
+                    gamepage.playLevel1();
+                }
                 stage.close();
             }
         });

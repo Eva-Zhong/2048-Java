@@ -2,7 +2,7 @@
     /*-fx-background-image: url("Fantasy-Sky-Step2d.jpg");
     -fx-background-color: #f2c615;
     */
-    -fx-background-image: url("3.png");
+    -fx-background-image: url("outer-space-wallpaper-4351-4405-hd-wallpapers.jpg");
     -fx-background-color:
             linear-gradient(to bottom right, #ddc500, #fff8d2);
 }
@@ -47,6 +47,7 @@
     -fx-background-color: rgba(230,200,40,0.5)
 }
 
+/*
 .button {
     -fx-font-size: 20px;
     -fx-font-family: "Palatino";
@@ -55,5 +56,6 @@
     -fx-background-radius: 10;
     -fx-background-color: rgba(245,216,88,0.5);
 }
+*/
 
 

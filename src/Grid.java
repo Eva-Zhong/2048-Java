@@ -37,21 +37,21 @@ public class Grid {
         this.yLocation = yLocation;
     }
     // this function merge this grid onto the mergeGrid if possible
-    public void merge(Grid mergeGrid) {
+    public int merge(Grid mergeGrid) {
         if (mergeGrid == null) {
             System.out.println("merging with null");
-            return;
+            return 0;
         }
         // if this grid is not displayed, stop the merge
         if (!this.getDisplay()) {
-            return;
+            return 0;
         }
         // if these grids are the same, merge
         if (mergeGrid.getNumber() == this.number) {
             mergeGrid.setNumber(this.number * 2);
             this.setNumber(0);
             this.setDisplay(false);
-            return;
+            return 1;
         }
         // if merge grid is empty, move this grid into the merge grid
         if (!mergeGrid.getDisplay()) {
@@ -59,6 +59,7 @@ public class Grid {
             mergeGrid.setDisplay(this.getDisplay());
             this.setDisplay(false);
             this.setNumber(0);
+            return 1;
         }
     }
     public Grid clone(){

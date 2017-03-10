@@ -1,0 +1,74 @@
+.root {
+	/*-fx-background-image: url("Fantasy-Sky-Step2d.jpg");
+	-fx-background-color: #f2c615;
+	*/
+	-fx-background-image: url("outer-space-wallpaper-4351-4405-hd-wallpapers.jpg");
+	-fx-background-color:
+		linear-gradient(to bottom right, #ddc500, #fff8d2);
+}
+
+#welcome-text {
+	-fx-font-size: 110px;
+	-fx-font-family: "Palatino";
+	-fx-fill: rgb(255, 255, 255, 0.4);
+	/*-fx-effect: innershadow (three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );*/
+	-fx-font-weight: bold;
+}
+
+.button {
+	-fx-font-size: 20px;
+	-fx-font-family: "Palatino";
+	-fx-font-weight: bold;
+	-fx-text-fill: #fbfbfb;
+	-fx-background-radius: 10;
+}
+
+
+
+#Level1{
+	-fx-background-color: rgba(180,130,180,0.4);
+}
+
+#Level2{
+	-fx-background-color: rgba(150,180,210,0.4);
+}
+#Level3{
+	-fx-background-color: rgba(120,120,120,0.4);
+}
+
+#Level1:hover{
+	-fx-background-color: lightgray;
+	-fx-text-fill: midnightblue;
+	-fx-font-weight:bold;
+}
+
+#Level2:hover{
+	-fx-background-color: lightgray;
+	-fx-text-fill: cadetblue;
+	-fx-font-weight:bold;
+}
+
+#Level3:hover{
+	-fx-background-color: lightgray;
+	-fx-text-fill: darkslategray;
+	-fx-font-weight:bold;
+}
+
+	/*-fx-background-color:
+
+			linear-gradient(#ffd65b, #e68400),
+			linear-gradient(#ffef84, #f2ba44),
+			linear-gradient(#ffea6a, #efaa22),
+			linear-gradient(from 0% 0% to 15% 50%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7) );
+*/
+
+#helpButton{
+	-fx-font-size: 15px;
+	-fx-background-color: rgba(150,180,210,0.6);
+}
+
+#helpButton:hover{
+	-fx-background-color: lightgray;
+	-fx-text-fill: darkslategray;
+	-fx-font-weight:bold;
+}

@@ -58,7 +58,6 @@ public class Gamepage extends Application{
         if (this.highestScore == "2048") {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             DialogPane dialog = alert.getDialogPane();
-            dialog.getButtonTypes().add(ButtonType.CLOSE);
             dialog.getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
             dialog.getStyleClass().add("alert");
             alert.setTitle("CONGRATULATIONS!");
@@ -75,7 +74,11 @@ public class Gamepage extends Application{
 
             if (ButtonType.CLOSE.equals(result.get())){
                 alert.close();
-            } else {
+            } else if (ButtonType.OK.equals(result.get())){
+                MainPage mainpage = new MainPage();
+                Stage newstage = mainpage.getStage();
+                newstage.show();
+                stage.close();
             }
         }
     }
@@ -215,7 +218,7 @@ public class Gamepage extends Application{
                 System.out.println(currentTile.getText());
 
                 if (currentGrid.getDisplay() == true) {
-                    currentTile.setStyle("-fx-background-color: rgba(245,216,88,0.5); -fx-font-size: 20px; -fx-font-family: 'Palatino'; -fx-text-fill: #fbfbfb");
+                    currentTile.setStyle("-fx-background-color: rgba(245,216,88,0.5); -fx-font-size: 30px; -fx-font-family: 'Palatino'; -fx-text-fill: #fbfbfb");
 
                 } if (currentGrid.getDisplay() == false) {
                     currentTile.setStyle("-fx-background-color: rgba(245, 216, 88, 0.0)");
@@ -267,8 +270,9 @@ public class Gamepage extends Application{
                     thisBoard.printBoard();
                     if(!thisBoard.isFull()){
                         level1();
+                    }else{
+                        displayLost();
                     }
-
                 } else if (keyCode == KeyCode.UP) {
                     thisBoard.rollUp();
                     thisBoard.generateRandom();
@@ -276,6 +280,9 @@ public class Gamepage extends Application{
                     thisBoard.printBoard();
                     if(!thisBoard.isFull()){
                         level1();
+                    }
+                    else{
+                        displayLost();
                     }
 
                 } else if (keyCode == KeyCode.LEFT) {
@@ -286,6 +293,9 @@ public class Gamepage extends Application{
                     if(!thisBoard.isFull()){
                         level1();
                     }
+                     else{
+                        displayLost();
+                    }
 
                 } else if (keyCode == KeyCode.RIGHT) {
                     thisBoard.rollRight();
@@ -295,10 +305,36 @@ public class Gamepage extends Application{
                     if(!thisBoard.isFull()){
                         level1();
                     }
+                    else{
+                        displayLost();
+                    }
                 }
             }
         });
     }
+    
+    
+        public void displayLost(){
+            MainPage mainpage = new MainPage();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            DialogPane dialog = alert.getDialogPane();
+            dialog.getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
+            dialog.getStyleClass().add("alert");
+            alert.setTitle("YOU LOST!");
+            dialog.setPrefSize(350,160);
+            alert.setHeaderText(null);
+            alert.setContentText("GOOD GAME!");
+            Button newGame = (Button) dialog.lookupButton(ButtonType.OK);
+            newGame.setText("New Game");
+            //alert.getButtonTypes().setAll(continueGame, newGame);
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (ButtonType.OK.equals(result.get())){
+                        Stage newstage = mainpage.getStage();
+                        newstage.show();
+                        stage.close();
+            }
+        }
 
     //Get a keyboard input from the user; return the input;
 

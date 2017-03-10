@@ -23,11 +23,26 @@
     -fx-text-alignment: center;
  }
 
-#level{
+#displayLevel{
     -fx-font-size: 24px;
     -fx-font-family: "Palatino";
     -fx-font-weight: normal;
     -fx-fill: #fff8d2;
+}
+
+#newGameButton{
+    -fx-font-size: 20px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: bold;
+    -fx-text-fill: #fbfbfb;
+    -fx-background-radius: 10;
+    -fx-background-color:  rgba(150,180,210,0.6);
+}
+
+#newGameButton:hover{
+	-fx-background-color: lightgray;
+	-fx-text-fill: midnightblue;
+	-fx-font-weight:bold;
 }
 
 #gametitle {
@@ -35,6 +50,9 @@
     -fx-font-family: "Palatino";
     -fx-font-weight: bold;
     -fx-fill: rgba(122, 122, 0, 0.4);
+    -fx-text-fill: #fbfbfb;
+    -fx-background-radius: 10;
+    -fx-background-color: rgba(150,180,210,0.6);
 }
 
 #tileLable {

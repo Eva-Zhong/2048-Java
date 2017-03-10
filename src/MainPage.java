@@ -89,56 +89,6 @@ public class MainPage extends Application{
         buttonPane.setVgap(5);
         buttonPane.setPadding(new Insets(0,10,0,10));
 
-		/*
-        Gamepage gamepage = new Gamepage();
-
-        Button level1 = new Button("Level 1");
-        level1.setMinHeight(MIN_BUTTON_HEIGHT);
-        level1.setMinWidth(MIN_BUTTON_WIDTH);
-        level1.setId("level1");
-        System.out.println("setID");
-        level1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //gamepage.setLevel("level 1");
-                //gamepage.playLevel1();
-                //Stage newstage = gamepage.getStage();
-                System.out.println("Hi");
-                //stage.close();
-            }
-        });
-
-        
-        Button level2 = new Button("Level 2");
-        level2.setMinHeight(MIN_BUTTON_HEIGHT);
-        level2.setMinWidth(MIN_BUTTON_WIDTH);
-        level2.setId("level2");
-        System.out.println("setID2222");
-        level2.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                gamepage.setLevel("level 2");
-                Stage newstage = gamepage.getStage();
-
-
-                stage.close();
-            }
-        });
-        Button level3 = new Button("Level 3");
-        level3.setMinHeight(MIN_BUTTON_HEIGHT);
-        level3.setMinWidth(MIN_BUTTON_WIDTH);
-        level3.setId("level3");
-        level3.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                gamepage.setLevel("level 3");
-                Stage newstage = gamepage.getStage();
-
-                stage.close();
-            }
-        });
-        */
-
         buttonPane.add(createLevelButton("Level1"),0,12);
         buttonPane.add(createLevelButton("Level2"),1,12);
         buttonPane.add(createLevelButton("Level3"),2,12);

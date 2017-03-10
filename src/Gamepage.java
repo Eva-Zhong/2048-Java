@@ -238,14 +238,11 @@ public class Gamepage extends Application{
     }
 
     public void playLevel1() {
+        
         drawInitialBoard();
 
         System.out.println("playLevel1");
         
-        /*while (!this.thisBoard.isFull()) {
-            if(this.scene == null){
-                System.out.println("thisscene");
-            }*/
         level1();
         
 
@@ -255,7 +252,7 @@ public class Gamepage extends Application{
     public void level1(){
         addKeyHandler();
     }
-    private int addKeyHandler () {
+    private void addKeyHandler () {
         Board thisBoard = this.thisBoard;
 
         this.scene.setOnKeyPressed( new EventHandler<KeyEvent>() {
@@ -301,7 +298,6 @@ public class Gamepage extends Application{
                 }
             }
         });
-        return 0;
     }
 
     //Get a keyboard input from the user; return the input;
@@ -383,7 +379,6 @@ public class Gamepage extends Application{
 
         Text score = new Text (getCurrentCondition());
         score.setId("score");
-
         scorePane.getChildren().add(score);
         scorePane.setAlignment(score, Pos.TOP_LEFT);
         scorePane.setAlignment(Pos.TOP_CENTER);
@@ -418,7 +413,7 @@ public class Gamepage extends Application{
         //Button level = new Button("Level 1");
         Text level = new Text (getLevel());
         System.out.println(getLevel());
-        level.setId("level");
+        level.setId("displayLevel");
 
         //levelPane.getChildren().add(rec);
         levelPane.getChildren().add(level);
@@ -441,6 +436,7 @@ public class Gamepage extends Application{
         newGamePane.setId("newGamePane");
 
         Button newGameButton = new Button("New Game");
+        newGameButton.setId("newGameButton");
 
         newGamePane.getChildren().add(newGameButton);
 

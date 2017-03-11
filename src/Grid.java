@@ -61,6 +61,7 @@ public class Grid {
             this.setNumber(0);
             return 0;
         }
+        return 0;
     }
     public Grid clone(){
         Grid grid = new Grid();

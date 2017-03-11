@@ -164,39 +164,16 @@ public class Board {
     
     
 
-    /*public void rollDown() {
+    public void rollDown() {
         //roll left twice to avoid special case where these could be two merge happening in one row.
-        rollOnerowDown(gridList[2][0]);
-        rollOnerowDown(gridList[2][1]);
-        rollOnerowDown(gridList[2][2]);
-        rollOnerowDown(gridList[2][3]);
-        rollOnerowDown(gridList[2][0]);
-        rollOnerowDown(gridList[2][1]);
-        rollOnerowDown(gridList[2][2]);
-        rollOnerowDown(gridList[2][3]);
-        rollOnerowDown(gridList[2][0]);
-        rollOnerowDown(gridList[2][1]);
-        rollOnerowDown(gridList[2][2]);
-        rollOnerowDown(gridList[2][3]);
-
-    }*/
+        rollDown1();
+        rollDown1();
+        rollDown1();
+    }
     
     public void rollDown1(){
     	rollOnerowDown(gridList[2][0]);
         rollOnerowDown(gridList[2][1]);
-        rollOnerowDown(gridList[2][2]);
-        rollOnerowDown(gridList[2][3]);
-    }
-    
-    public void rollDown2(){
-    	rollOnerowDown(gridList[2][0]);
-        rollOnerowDown(gridList[2][1]);
-        rollOnerowDown(gridList[2][2]);
-        rollOnerowDown(gridList[2][3]);
-    }
-    public void rollDown3(){
-    	rollOnerowDown(gridList[2][0]);
-    	rollOnerowDown(gridList[2][1]);
         rollOnerowDown(gridList[2][2]);
         rollOnerowDown(gridList[2][3]);
     }

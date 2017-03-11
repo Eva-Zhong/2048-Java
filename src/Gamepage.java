@@ -90,6 +90,9 @@ public class Gamepage extends Application{
     public String getLevel() {
         return this.level;
     }
+    public Board getBoard(){
+        return this.thisBoard;
+    }
 
     public Stage getStage() {
         BorderPane root = new BorderPane();
@@ -191,9 +194,6 @@ public class Gamepage extends Application{
                 //this.tileMap.put(keyList, newtile);
 
                 this.tileList[row][col] = newtile;
-                if (this.tileList[row][col] == null){
-                System.out.println("null"+row+col);
-                }
                 //int[] thisKey = {1,2};
 
                 //if (Arrays.equals(keyList, thisKey))  {
@@ -216,9 +216,6 @@ public class Gamepage extends Application{
                 String stringCurrentNum = Integer.toString(currentNum);
                 currentTile.setId(stringCurrentNum);
                 currentTile.setText(stringCurrentNum);
-                
-                System.out.println(currentTile.getText());
-
                 if (currentGrid.getDisplay() == true) {
                     currentTile.setStyle("-fx-font-size: 40px; -fx-font-family: 'Palatino'; -fx-text-fill: #fbfbfb");
 
@@ -235,6 +232,38 @@ public class Gamepage extends Application{
             }
         }
     }
+    private Grid[][] copyBoard(){
+        Grid[][] virtualGird = new Grid[4][4];
+        Grid[][] girdList = getBoard().getGridList();
+        for (int i = 0; i < 4; i++){
+            for (int j = 0; j < 4; j++){
+                virtualGird[i][j] = girdList[i][j].clone();
+            }
+        }
+        return virtualGird;
+    }
+    private Board getVirtualBoard(){
+        Board virtualGame = new Board();
+        Grid[][] virtualGird = copyBoard();
+        virtualGame.setGridList(virtualGird);
+        return virtualGame;
+    }
+    public void playable(){
+        int scoreLeft, scoreRight, scoreUp, scoreDown;
+        Board leftBoard = getVirtualBoard();
+        leftBoard.rollLeft();
+        scoreLeft = leftBoard.getScore();
+        Board rightBoard = getVirtualBoard();
+        rightBoard.rollRight();
+        scoreRight = rightBoard.getScore();
+        Board upBoard = getVirtualBoard();
+        upBoard.rollUp();
+        scoreUp = upBoard.getScore();
+        Board downBoard = getVirtualBoard();
+        downBoard.rollDown();
+        scoreDown = downBoard.getScore();
+        int currentscore = this.thisBoard.getScore();
+    }
     public void drawInitialBoard() {
         printTileList();
         this.thisBoard.startGame();
@@ -244,10 +273,7 @@ public class Gamepage extends Application{
 
     public void playLevel1() {
         
-        drawInitialBoard();
-
-        System.out.println("playLevel1");
-        
+        drawInitialBoard(); 
         level1();
         
 
@@ -268,13 +294,26 @@ public class Gamepage extends Application{
                 if (keyCode == KeyCode.DOWN){
                     thisBoard.rollDown1();
                     updateBoard(thisBoard);
-                    Thread.sleep(1000L); 
-                    thisBoard.rollDown2();
+                    try {
+                        Thread.sleep(500);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    } 
+                    System.out.println("Down2");
+                    thisBoard.rollDown1();
                     updateBoard(thisBoard);
-                    Thread.sleep(1000L); 
-                    thisBoard.rollDown3();
+                    try {
+                        Thread.sleep(500);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    }
+                    thisBoard.rollDown1();
                     updateBoard(thisBoard);
-                    Thread.sleep(1000L); 
+                    // try {
+                    //     Thread.sleep(500);                 //1000 milliseconds is one second.
+                    // } catch(InterruptedException ex) {
+                    // Thread.currentThread().interrupt();
+                    // } 
                     thisBoard.printBoard();
                     thisBoard.generateRandom();
                     if(!thisBoard.isFull()){
@@ -439,16 +478,13 @@ public class Gamepage extends Application{
         //if gravity happens, curCondition = "Gravity";
         //else if substraction happens, curCondition = "Substraction";
         //else, return score.
-		//try 3/10/2017
-		if (this.thisBoard.gridList != null){
-			int currentScore = this.thisBoard.getScore();
-        	curCondition = "Current Score: " + currentScore;
+        if (this.thisBoard.gridList != null){
+            int currentScore = this.thisBoard.getScore();
+            curCondition = "Current Score: " + currentScore;
         } else{
-        	curCondition = "Current Score: " + "0";
+            curCondition = "Current Score: " + "0";
         }
-        //System.out.println(thisBoard.getScore());
         //A function should return the actual current score.
-
         return curCondition;
     }
 
@@ -463,7 +499,6 @@ public class Gamepage extends Application{
         //rec.setArcHeight(10);
         //Button level = new Button("Level 1");
         Text level = new Text (getLevel());
-        System.out.println(getLevel());
         level.setId("displayLevel");
 
         //levelPane.getChildren().add(rec);

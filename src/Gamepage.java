@@ -212,13 +212,15 @@ public class Gamepage extends Application{
                 int currentNum = currentGrid.getNumber();
 
                 Button currentTile = this.tileList[i][j];
-
-                currentTile.setText(Integer.toString(currentNum));
+                
+                String stringCurrentNum = Integer.toString(currentNum);
+                currentTile.setId(stringCurrentNum);
+                currentTile.setText(stringCurrentNum);
                 
                 System.out.println(currentTile.getText());
 
                 if (currentGrid.getDisplay() == true) {
-                    currentTile.setStyle("-fx-background-color: rgba(245,216,88,0.5); -fx-font-size: 30px; -fx-font-family: 'Palatino'; -fx-text-fill: #fbfbfb");
+                    currentTile.setStyle("-fx-font-size: 40px; -fx-font-family: 'Palatino'; -fx-text-fill: #fbfbfb");
 
                 } if (currentGrid.getDisplay() == false) {
                     currentTile.setStyle("-fx-background-color: rgba(245, 216, 88, 0.0)");

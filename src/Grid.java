@@ -7,6 +7,7 @@ public class Grid {
     private boolean display = false;
     private int xLocation;
     private int yLocation;
+    private boolean isMerged;
 
     public int getNumber() {
         return this.number;
@@ -36,8 +37,16 @@ public class Grid {
     public void setyLocation(int yLocation) {
         this.yLocation = yLocation;
     }
-    // this function merge this grid onto the mergeGrid if possible
-    public int merge(Grid mergeGrid) {
+    public void setIsMerged(boolean status){
+        this.isMerged = status;
+    }
+    public boolean getIsMerged(){
+        return this.isMerged;
+    }
+    // this function merge this grid onto the mergeGrid if possible 
+    // it also return a score as double: the int part is the real score and the decimal part
+    // indicates whether this board can be moved or not when we call playable() in Gamepage 
+    public double merge(Grid mergeGrid) {
         if (mergeGrid == null) {
             System.out.println("merging with null");
             return 0;
@@ -47,11 +56,13 @@ public class Grid {
             return 0;
         }
         // if these grids are the same, merge
-        if (mergeGrid.getNumber() == this.number) {
+        if (mergeGrid.getNumber() == this.number && (!mergeGrid.getIsMerged())) {
             mergeGrid.setNumber(this.number * 2);
+            this.setIsMerged(false);
+            mergeGrid.setIsMerged(true);
             this.setNumber(0);
             this.setDisplay(false);
-            return this.number*2;
+            return mergeGrid.getNumber()*2;
         }
         // if merge grid is empty, move this grid into the merge grid
         if (!mergeGrid.getDisplay()) {
@@ -59,7 +70,9 @@ public class Grid {
             mergeGrid.setDisplay(this.getDisplay());
             this.setDisplay(false);
             this.setNumber(0);
-            return 0;
+            mergeGrid.setIsMerged(false);
+            // return 0.01 to indicate there is a possible move in playable().
+            return 0.000001;
         }
         return 0;
     }

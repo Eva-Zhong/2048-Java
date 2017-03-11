@@ -5,13 +5,16 @@ import java.util.*;
  */
 public class Board {
     public Grid[][] gridList;
-    public int score;
+    public double score;
 
     public void setGridList(Grid[][] gridList) {
         this.gridList = gridList;
     }
     public Grid[][] getGridList(){
         return this.gridList;
+    }
+    public void setScore(double score){
+        this.score = score;
     }
     public void startGame() {
         Grid[][] gridList = new Grid[4][4];
@@ -98,7 +101,6 @@ public class Board {
                 startGrid = this.gridList[x][y + 1];
             }
             y = y + 1;
-            ;
         }
     }
 
@@ -128,7 +130,6 @@ public class Board {
                 startGrid = this.gridList[x][y - 1];
             }
             y = y - 1;
-            ;
         }
     }
 
@@ -158,7 +159,6 @@ public class Board {
                 startGrid = this.gridList[x + 1][y];
             }
             x = x + 1;
-            ;
         }
     }
     
@@ -187,7 +187,6 @@ public class Board {
                 startGrid = this.gridList[x - 1][y];
             }
             x = x - 1;
-            ;
         }
     }
 
@@ -206,7 +205,7 @@ public class Board {
             System.out.println(row);
         }
     }
-
+    // This function check the board is full and set all grid status back to not merged.
     public boolean isFull() {
         int count = 0;
         for (int i = 0; i < 4; i++) {
@@ -222,10 +221,15 @@ public class Board {
         return false;
     }
 
-   
+    public void resetStatus(){
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                this.gridList[i][j].setIsMerged(false);
+            }
+        }
+    }
 
-    public int getScore() {
+    public double getScore() {
         return this.score;
-
     }
 }

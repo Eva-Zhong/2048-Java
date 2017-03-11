@@ -432,8 +432,10 @@ public class Gamepage extends Application{
         //if gravity happens, curCondition = "Gravity";
         //else if substraction happens, curCondition = "Substraction";
         //else, return score.
-
-        curCondition = "Current Score: " + "10000";
+		//try 3/10/2017
+		int currentScore = this.thisBoard.getScore();
+        curCondition = "Current Score: " + currentScore;
+        //System.out.println(thisBoard.getScore());
         //A function should return the actual current score.
 
         return curCondition;

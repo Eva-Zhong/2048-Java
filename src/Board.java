@@ -160,6 +160,8 @@ public class Board {
             ;
         }
     }
+    
+    
 
     public void rollDown() {
         //roll left twice to avoid special case where these could be two merge happening in one row.
@@ -222,35 +224,13 @@ public class Board {
         return false;
     }
 
-    public void play() {
-        Scanner reader = new Scanner(System.in);
-        while (!isFull()) {
-            generateRandom();
-            printBoard();
-            System.out.println("Enter a number(1 for up, 2 for down,3 left, 4 right): ");
-            int n = reader.nextInt();
-            switch (n) {
-                case 1:
-                    rollUp();
-                    break;
-                case 2:
-                    rollDown();
-                    break;
-                case 3:
-                    rollLeft();
-                    break;
-                case 4:
-                    rollRight();
-                    break;
-            }
-        }
-    }
+   
 
     public int getScore() {
         int score = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                if (this.gridList[i][j].getDisplay()) {
+                if (gridList[i][j].getDisplay()) {
                     int currentScore = this.gridList[i][j].getNumber();
                     score += currentScore * currentScore;
                 }

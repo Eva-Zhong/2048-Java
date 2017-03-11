@@ -109,7 +109,6 @@ public class MainPage extends Application{
                 Stage newstage = gamepage.getStage();
                 gamepage.setLevel(level);
                 if (level == "Level1") {
-                    System.out.println("playLevel1111");
                     gamepage.playLevel1();
                 }
                 stage.close();

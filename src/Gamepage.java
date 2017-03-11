@@ -266,10 +266,17 @@ public class Gamepage extends Application{
             public void handle(KeyEvent e) {
                 KeyCode keyCode = e.getCode();
                 if (keyCode == KeyCode.DOWN){
-                    thisBoard.rollDown();
-                    thisBoard.generateRandom();
+                    thisBoard.rollDown1();
                     updateBoard(thisBoard);
+                    Thread.sleep(1000L); 
+                    thisBoard.rollDown2();
+                    updateBoard(thisBoard);
+                    Thread.sleep(1000L); 
+                    thisBoard.rollDown3();
+                    updateBoard(thisBoard);
+                    Thread.sleep(1000L); 
                     thisBoard.printBoard();
+                    thisBoard.generateRandom();
                     if(!thisBoard.isFull()){
                         level1();
                     }else{
@@ -433,8 +440,12 @@ public class Gamepage extends Application{
         //else if substraction happens, curCondition = "Substraction";
         //else, return score.
 		//try 3/10/2017
-		int currentScore = this.thisBoard.getScore();
-        curCondition = "Current Score: " + currentScore;
+		if (this.thisBoard.gridList != null){
+			int currentScore = this.thisBoard.getScore();
+        	curCondition = "Current Score: " + currentScore;
+        } else{
+        	curCondition = "Current Score: " + "0";
+        }
         //System.out.println(thisBoard.getScore());
         //A function should return the actual current score.
 

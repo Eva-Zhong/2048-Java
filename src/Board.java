@@ -5,6 +5,7 @@ import java.util.*;
  */
 public class Board {
     public Grid[][] gridList;
+    public int score;
 
     public void setGridList(Grid[][] gridList) {
         this.gridList = gridList;
@@ -92,7 +93,7 @@ public class Board {
         int x = startGrid.getxLocation();
         int y = startGrid.getyLocation();
         while (y < 4) {
-            startGrid.merge(this.gridList[x][y - 1]);
+            this.score += startGrid.merge(this.gridList[x][y - 1]);
             if (y < 3) {
                 startGrid = this.gridList[x][y + 1];
             }
@@ -122,7 +123,7 @@ public class Board {
         int x = startGrid.getxLocation();
         int y = startGrid.getyLocation();
         while (y >= 0) {
-            startGrid.merge(this.gridList[x][y + 1]);
+            this.score += startGrid.merge(this.gridList[x][y + 1]);
             if (y > 0) {
                 startGrid = this.gridList[x][y - 1];
             }
@@ -152,7 +153,7 @@ public class Board {
         int x = startGrid.getxLocation();
         int y = startGrid.getyLocation();
         while (x < 4) {
-            startGrid.merge(this.gridList[x - 1][y]);
+            this.score += startGrid.merge(this.gridList[x - 1][y]);
             if (x < 3) {
                 startGrid = this.gridList[x + 1][y];
             }
@@ -163,7 +164,7 @@ public class Board {
     
     
 
-    public void rollDown() {
+    /*public void rollDown() {
         //roll left twice to avoid special case where these could be two merge happening in one row.
         rollOnerowDown(gridList[2][0]);
         rollOnerowDown(gridList[2][1]);
@@ -178,13 +179,33 @@ public class Board {
         rollOnerowDown(gridList[2][2]);
         rollOnerowDown(gridList[2][3]);
 
+    }*/
+    
+    public void rollDown1(){
+    	rollOnerowDown(gridList[2][0]);
+        rollOnerowDown(gridList[2][1]);
+        rollOnerowDown(gridList[2][2]);
+        rollOnerowDown(gridList[2][3]);
+    }
+    
+    public void rollDown2(){
+    	rollOnerowDown(gridList[2][0]);
+        rollOnerowDown(gridList[2][1]);
+        rollOnerowDown(gridList[2][2]);
+        rollOnerowDown(gridList[2][3]);
+    }
+    public void rollDown3(){
+    	rollOnerowDown(gridList[2][0]);
+    	rollOnerowDown(gridList[2][1]);
+        rollOnerowDown(gridList[2][2]);
+        rollOnerowDown(gridList[2][3]);
     }
 
     private void rollOnerowDown(Grid startGrid) {
         int x = startGrid.getxLocation();
         int y = startGrid.getyLocation();
         while (x >= 0) {
-            startGrid.merge(this.gridList[x + 1][y]);
+            this.score += startGrid.merge(this.gridList[x + 1][y]);
             if (x > 0) {
                 startGrid = this.gridList[x - 1][y];
             }
@@ -227,16 +248,7 @@ public class Board {
    
 
     public int getScore() {
-        int score = 0;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (gridList[i][j].getDisplay()) {
-                    int currentScore = this.gridList[i][j].getNumber();
-                    score += currentScore * currentScore;
-                }
-            }
-        }
-        return score;
+        return this.score;
 
     }
 }

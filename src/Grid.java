@@ -51,7 +51,7 @@ public class Grid {
             mergeGrid.setNumber(this.number * 2);
             this.setNumber(0);
             this.setDisplay(false);
-            return 1;
+            return this.number*2;
         }
         // if merge grid is empty, move this grid into the merge grid
         if (!mergeGrid.getDisplay()) {
@@ -59,7 +59,7 @@ public class Grid {
             mergeGrid.setDisplay(this.getDisplay());
             this.setDisplay(false);
             this.setNumber(0);
-            return 1;
+            return 0;
         }
     }
     public Grid clone(){

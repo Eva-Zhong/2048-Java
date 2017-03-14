@@ -1,3 +1,6 @@
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -20,6 +23,7 @@ import java.util.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.event.EventHandler;
+import javafx.util.Duration;
 
 /**
  * Created by zhonge on 3/4/17.
@@ -322,31 +326,16 @@ public class Gamepage extends Application{
                         level1();
                         return;
                     }
-                    thisBoard.rollDown1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    updateBoard(thisBoard);
-                    thisBoard.rollDown1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    updateBoard(thisBoard);
-                    thisBoard.rollDown1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
 
-                    updateBoard(thisBoard);
-                    updateCurScore();
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
+                        thisBoard.rollDown1();
+                        updateBoard(thisBoard);
+                    }));
+                    timeline.setCycleCount(3);
+                    timeline.play();
+
                     thisBoard.generateRandom();
-
+                    updateCurScore();
                     updateBoard(thisBoard);
 
                     if(!thisBoard.isFull()){
@@ -364,30 +353,15 @@ public class Gamepage extends Application{
                         level1();
                         return;
                     }
-                    thisBoard.rollUp1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    updateBoard(thisBoard);
-                    thisBoard.rollUp1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    updateBoard(thisBoard);
-                    thisBoard.rollUp1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
+                        thisBoard.rollUp1();
+                        updateBoard(thisBoard);
+                    }));
+                    timeline.setCycleCount(3);
+                    timeline.play();
 
-                    updateBoard(thisBoard);
-                    updateCurScore();
                     thisBoard.generateRandom();
+                    updateCurScore();
                     updateBoard(thisBoard);
 
                     if(!thisBoard.isFull()){
@@ -406,30 +380,16 @@ public class Gamepage extends Application{
                         level1();
                         return;
                     }
-                    thisBoard.rollLeft1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    updateBoard(thisBoard);
-                    thisBoard.rollLeft1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    updateBoard(thisBoard);
-                    thisBoard.rollLeft1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
 
-                    updateBoard(thisBoard);
-                    updateCurScore();
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
+                        thisBoard.rollLeft1();
+                        updateBoard(thisBoard);
+                    }));
+                    timeline.setCycleCount(3);
+                    timeline.play();
+
                     thisBoard.generateRandom();
+                    updateCurScore();
                     updateBoard(thisBoard);
 
 
@@ -449,29 +409,15 @@ public class Gamepage extends Application{
                         level1();
                         return;
                     }
-                    thisBoard.rollRight1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    updateBoard(thisBoard);
-                    thisBoard.rollRight1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    updateBoard(thisBoard);
-                    thisBoard.rollRight1();
-                    try {
-                        Thread.sleep(25);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    updateBoard(thisBoard);
-                    updateCurScore();
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
+                        thisBoard.rollRight1();
+                        updateBoard(thisBoard);
+                    }));
+                    timeline.setCycleCount(3);
+                    timeline.play();
+
                     thisBoard.generateRandom();
+                    updateCurScore();
                     updateBoard(thisBoard);
 
                     if(!thisBoard.isFull()){

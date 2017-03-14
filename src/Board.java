@@ -169,6 +169,7 @@ public class Board {
         rollOnerowDown(gridList[2][1]);
         rollOnerowDown(gridList[2][2]);
         rollOnerowDown(gridList[2][3]);
+
     }
 
     private void rollOnerowDown(Grid startGrid) {

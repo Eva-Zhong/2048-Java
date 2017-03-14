@@ -33,8 +33,13 @@ public class Gamepage extends Application{
     //If the user have a tile with number 2048, the highestScore will be updated to "2048", and an alert message will occur.
 
     private Stage stage;
-    private String level;
     private Scene scene;
+
+    private String curStatus = "Current Score: 0";
+    private Text scoreText = new Text(curStatus);
+
+    private String curLevel = "Not Set";
+    private Text curLevelDisplay = new Text(this.curLevel);
 
 
     @Override
@@ -84,17 +89,18 @@ public class Gamepage extends Application{
     }
 
     public void setLevel(String chosenlevel) {
-        this.level = chosenlevel;
+        this.curLevel = chosenlevel;
     }
 
     public String getLevel() {
-        return this.level;
+        return this.curLevel;
     }
     public Board getBoard(){
         return this.thisBoard;
     }
 
     public Stage getStage() {
+        System.out.println("Getstage Called");
         BorderPane root = new BorderPane();
 
         root.setCenter(addBoardPane());
@@ -225,6 +231,7 @@ public class Gamepage extends Application{
             }
         }
     }
+
     public void printTileList(){
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -269,7 +276,7 @@ public class Gamepage extends Application{
         if(scoreLeft == currentscore && scoreDown == currentscore && scoreUp == currentscore && scoreRight == currentscore){
             System.out.println(scoreDown);
             System.out.println(scoreUp);
-            System.out.println(currentscore);
+            System.out.println("currentScore = " + currentscore);
             return false;
         }
         return true;
@@ -287,13 +294,17 @@ public class Gamepage extends Application{
         level1();
         
 
-
         // If score is 2048, alert.
     }
+
     public void level1(){
         thisBoard.resetStatus();
+        setLevel("Level 1");
+        this.curLevelDisplay.setText(getLevel());
+
         addKeyHandler();
     }
+
     private void addKeyHandler () {
         Board thisBoard = this.thisBoard;
         Board virtualBoard = getVirtualBoard();
@@ -312,19 +323,32 @@ public class Gamepage extends Application{
                         return;
                     }
                     thisBoard.rollDown1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                     updateBoard(thisBoard);
-                    // try {
-                    //     Thread.sleep(500);                 //1000 milliseconds is one second.
-                    // } catch(InterruptedException ex) {
-                    // Thread.currentThread().interrupt();
-                    // } 
-
                     thisBoard.rollDown1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                     updateBoard(thisBoard);
-
                     thisBoard.rollDown1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+                    updateBoard(thisBoard);
+                    updateCurScore();
                     thisBoard.generateRandom();
+
                     updateBoard(thisBoard);
+
                     if(!thisBoard.isFull()){
                         level1();
                     }else{
@@ -340,10 +364,32 @@ public class Gamepage extends Application{
                         level1();
                         return;
                     }
-                    thisBoard.rollUp();
+                    thisBoard.rollUp1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                    updateBoard(thisBoard);
+                    thisBoard.rollUp1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                    updateBoard(thisBoard);
+                    thisBoard.rollUp1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+                    updateBoard(thisBoard);
+                    updateCurScore();
                     thisBoard.generateRandom();
                     updateBoard(thisBoard);
-                    // thisBoard.printBoard();
+
                     if(!thisBoard.isFull()){
                         level1();
                     }else{
@@ -360,10 +406,33 @@ public class Gamepage extends Application{
                         level1();
                         return;
                     }
-                    thisBoard.rollLeft();
+                    thisBoard.rollLeft1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                    updateBoard(thisBoard);
+                    thisBoard.rollLeft1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                    updateBoard(thisBoard);
+                    thisBoard.rollLeft1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+                    updateBoard(thisBoard);
+                    updateCurScore();
                     thisBoard.generateRandom();
                     updateBoard(thisBoard);
-                    // thisBoard.printBoard();
+
+
                     if(!thisBoard.isFull()){
                         level1();
                     }else{
@@ -380,11 +449,31 @@ public class Gamepage extends Application{
                         level1();
                         return;
                     }
-                    thisBoard.rollRight();
-                    thisBoard.generateRandom();                    
+                    thisBoard.rollRight1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                     updateBoard(thisBoard);
-                    // System.out.println(thisBoard.getScore());
-                    // thisBoard.printBoard();
+                    thisBoard.rollRight1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                    updateBoard(thisBoard);
+                    thisBoard.rollRight1();
+                    try {
+                        Thread.sleep(25);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                    updateBoard(thisBoard);
+                    updateCurScore();
+                    thisBoard.generateRandom();
+                    updateBoard(thisBoard);
+
                     if(!thisBoard.isFull()){
                         level1();
                     }else{
@@ -397,16 +486,19 @@ public class Gamepage extends Application{
             }
         });
     }
+
+
         public boolean isMoved(double oldScore, double newScore){
-            System.out.println(oldScore);
-            System.out.println(newScore);
+            System.out.println("oldScore " + oldScore);
+            System.out.println("newScore " + newScore);
             if (oldScore == newScore){
                 System.out.println(false);
                 return false;
             }
             return true;
         }
-    
+
+
         public void displayLost(){
             MainPage mainpage = new MainPage();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -450,6 +542,7 @@ public class Gamepage extends Application{
 
     //This function creates the top part of the game interface, including the game title,
     //the current level, and the current score.
+
 
     public Node addTopPane() {
 
@@ -502,36 +595,55 @@ public class Gamepage extends Application{
         return titlePane;
     }
 
+    private void updateCurScore() {
+
+        int newScore = (int) this.thisBoard.getScore();
+
+        //Get new score from backend, update curStatus
+        this.curStatus = "Current Score: " + newScore;
+
+        //Update scoreText to display new status
+        this.scoreText.setText(this.curStatus);
+
+        System.out.println(this.scoreText);
+        System.out.println("newScore: " + newScore);
+        System.out.println("this.curStatus = " + this.curStatus);
+    }
+
+
     private Node addScoreDisplay() {
 
         StackPane scorePane = new StackPane();
 
-        Text score = new Text (getCurrentCondition());
-        score.setId("score");
-        scorePane.getChildren().add(score);
-        scorePane.setAlignment(score, Pos.TOP_LEFT);
-        scorePane.setAlignment(Pos.TOP_CENTER);
+        this.scoreText.setText(this.curStatus);
 
+        this.scoreText.setId("score");
+
+        scorePane.getChildren().add(this.scoreText);
+        scorePane.setAlignment(this.scoreText, Pos.TOP_LEFT);
+        scorePane.setAlignment(Pos.TOP_CENTER);
         return scorePane;
     }
 
-
     //This method either returns the current score,
     //or notify the user that the 'Gravity' function or 'Substraction' is happening.
+    /*
     private String getCurrentCondition() {
         String curCondition = "";
         //if gravity happens, curCondition = "Gravity";
         //else if substraction happens, curCondition = "Substraction";
         //else, return score.
         if (this.thisBoard.gridList != null){
+            System.out.println("Gridlist null");
             int currentScore = (int)this.thisBoard.getScore();
             curCondition = "Current Score: " + currentScore;
-        } else{
+        } else {
             curCondition = "Current Score: " + "0";
         }
         //A function should return the actual current score.
         return curCondition;
     }
+    */
 
 
     private Node displayLevel() {
@@ -543,11 +655,13 @@ public class Gamepage extends Application{
         //rec.setArcWidth(10);
         //rec.setArcHeight(10);
         //Button level = new Button("Level 1");
-        Text level = new Text (getLevel());
-        level.setId("displayLevel");
+
+        this.curLevelDisplay.setText(this.curLevel);
+
+        this.curLevelDisplay.setId("displayLevel");
 
         //levelPane.getChildren().add(rec);
-        levelPane.getChildren().add(level);
+        levelPane.getChildren().add(this.curLevelDisplay);
         levelPane.setAlignment(Pos.BOTTOM_LEFT);
 
         return levelPane;

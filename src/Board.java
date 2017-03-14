@@ -78,14 +78,12 @@ public class Board {
 
     public void rollLeft() {
         //roll left twice to avoid special case where these could be two merge happening in one row.
-        rollOnerowLeft(gridList[0][1]);
-        rollOnerowLeft(gridList[1][1]);
-        rollOnerowLeft(gridList[2][1]);
-        rollOnerowLeft(gridList[3][1]);
-        rollOnerowLeft(gridList[0][1]);
-        rollOnerowLeft(gridList[1][1]);
-        rollOnerowLeft(gridList[2][1]);
-        rollOnerowLeft(gridList[3][1]);
+        rollLeft1();
+        rollLeft1();
+        rollLeft1();
+    }
+
+    public void rollLeft1() {
         rollOnerowLeft(gridList[0][1]);
         rollOnerowLeft(gridList[1][1]);
         rollOnerowLeft(gridList[2][1]);
@@ -106,19 +104,16 @@ public class Board {
 
     public void rollRight() {
         //roll right twice to avoid special case where these could be two merge happening in one row.
-        rollOnerowRight(gridList[0][2]);
-        rollOnerowRight(gridList[1][2]);
-        rollOnerowRight(gridList[2][2]);
-        rollOnerowRight(gridList[3][2]);
-        rollOnerowRight(gridList[0][2]);
-        rollOnerowRight(gridList[1][2]);
-        rollOnerowRight(gridList[2][2]);
-        rollOnerowRight(gridList[3][2]);
-        rollOnerowRight(gridList[0][2]);
-        rollOnerowRight(gridList[1][2]);
-        rollOnerowRight(gridList[2][2]);
-        rollOnerowRight(gridList[3][2]);
+        rollRight1();
+        rollRight1();
+        rollRight1();
+    }
 
+    public void rollRight1() {
+        rollOnerowRight(gridList[0][2]);
+        rollOnerowRight(gridList[1][2]);
+        rollOnerowRight(gridList[2][2]);
+        rollOnerowRight(gridList[3][2]);
     }
 
     private void rollOnerowRight(Grid startGrid) {
@@ -133,21 +128,19 @@ public class Board {
         }
     }
 
+
     public void rollUp() {
         //roll left twice to avoid special case where these could be two merge happening in one row.
-        rollOnerowUp(gridList[1][0]);
-        rollOnerowUp(gridList[1][1]);
-        rollOnerowUp(gridList[1][2]);
-        rollOnerowUp(gridList[1][3]);
-        rollOnerowUp(gridList[1][0]);
-        rollOnerowUp(gridList[1][1]);
-        rollOnerowUp(gridList[1][2]);
-        rollOnerowUp(gridList[1][3]);
-        rollOnerowUp(gridList[1][0]);
-        rollOnerowUp(gridList[1][1]);
-        rollOnerowUp(gridList[1][2]);
-        rollOnerowUp(gridList[1][3]);
+        rollUp1();
+        rollUp1();
+        rollUp1();
+    }
 
+    public void rollUp1() {
+        rollOnerowUp(gridList[1][0]);
+        rollOnerowUp(gridList[1][1]);
+        rollOnerowUp(gridList[1][2]);
+        rollOnerowUp(gridList[1][3]);
     }
 
     private void rollOnerowUp(Grid startGrid) {

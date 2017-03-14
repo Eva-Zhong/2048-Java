@@ -309,6 +309,12 @@ public class Gamepage extends Application{
         addKeyHandler();
     }
 
+    public void level2(){
+        thisBoard.resetStatus();
+        setLevel("Level 2");
+        this.curLevelDisplay.setText(getLevel());
+    }
+
     private void addKeyHandler () {
         Board thisBoard = this.thisBoard;
         Board virtualBoard = getVirtualBoard();
@@ -333,10 +339,14 @@ public class Gamepage extends Application{
                     }));
                     timeline.setCycleCount(3);
                     timeline.play();
-
-                    thisBoard.generateRandom();
-                    updateCurScore();
-                    updateBoard(thisBoard);
+                    timeline.setOnFinished(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            thisBoard.generateRandom();
+                            updateCurScore();
+                            updateBoard(thisBoard);
+                        }
+                    });
 
                     if(!thisBoard.isFull()){
                         level1();
@@ -359,10 +369,14 @@ public class Gamepage extends Application{
                     }));
                     timeline.setCycleCount(3);
                     timeline.play();
-
-                    thisBoard.generateRandom();
-                    updateCurScore();
-                    updateBoard(thisBoard);
+                    timeline.setOnFinished(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            thisBoard.generateRandom();
+                            updateCurScore();
+                            updateBoard(thisBoard);
+                        }
+                    });
 
                     if(!thisBoard.isFull()){
                         level1();
@@ -388,9 +402,14 @@ public class Gamepage extends Application{
                     timeline.setCycleCount(3);
                     timeline.play();
 
-                    thisBoard.generateRandom();
-                    updateCurScore();
-                    updateBoard(thisBoard);
+                    timeline.setOnFinished(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            thisBoard.generateRandom();
+                            updateCurScore();
+                            updateBoard(thisBoard);
+                        }
+                    });
 
 
                     if(!thisBoard.isFull()){
@@ -416,9 +435,14 @@ public class Gamepage extends Application{
                     timeline.setCycleCount(3);
                     timeline.play();
 
-                    thisBoard.generateRandom();
-                    updateCurScore();
-                    updateBoard(thisBoard);
+                    timeline.setOnFinished(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            thisBoard.generateRandom();
+                            updateCurScore();
+                            updateBoard(thisBoard);
+                        }
+                    });
 
                     if(!thisBoard.isFull()){
                         level1();

@@ -110,6 +110,8 @@ public class MainPage extends Application{
                 gamepage.setLevel(level);
                 if (level == "Level1") {
                     gamepage.playLevel1();
+                } else if (level == "Level2"){
+                    gamepage.playLevel2();
                 }
                 stage.close();
             }

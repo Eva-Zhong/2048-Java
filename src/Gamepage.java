@@ -24,6 +24,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
+import javafx.scene.transform.Rotate;
+import javafx.animation.RotateTransition;
 
 /**
  * Created by zhonge on 3/4/17.
@@ -38,6 +40,7 @@ public class Gamepage extends Application{
 
     private Stage stage;
     private Scene scene;
+    private BorderPane gridBoard;
 
     private String curStatus = "Current Score: 0";
     private Text scoreText = new Text(curStatus);
@@ -45,13 +48,17 @@ public class Gamepage extends Application{
     private String curLevel = "Not Set";
     private Text curLevelDisplay = new Text(this.curLevel);
 
+    private Node boardPane = addBoardPane();
+
 
     @Override
     public void start(Stage primaryStage){
         stage = primaryStage;
         BorderPane root = new BorderPane();
+        //gridBoard = (BorderPane) addBoardPane();
 
-        root.setCenter(addBoardPane());
+
+        root.setCenter(this.boardPane);
         root.setTop(addTopPane());
 
         printTileList();
@@ -107,7 +114,7 @@ public class Gamepage extends Application{
         System.out.println("Getstage Called");
         BorderPane root = new BorderPane();
 
-        root.setCenter(addBoardPane());
+        root.setCenter(this.boardPane);
         root.setTop(addTopPane());
 
         this.scene = new Scene(root,1200,800);
@@ -167,6 +174,7 @@ public class Gamepage extends Application{
         board.setPadding(new Insets(0,10,20,10));
 
         board.getChildren().add(add16Tiles());
+
 
         //addTiles(grid, "2", 1, 1 );
 
@@ -309,10 +317,64 @@ public class Gamepage extends Application{
         addKeyHandler();
     }
 
+    public void playLevel2() {
+        drawInitialBoard();
+
+        level2();
+    }
+
+    public void rotateBoard() {
+
+
+        RotateTransition rt = new RotateTransition(Duration.millis(3000), this.boardPane);
+        rt.setByAngle(-90);
+        rt.setAutoReverse(true);
+        rt.play();
+        //Rotate rotationTransform = new Rotate(90, 600, 260);
+        //this.boardPane.getTransforms().add(rotationTransform);
+    }
+
+    public void gravity() {
+        //rotateBoard();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
+            thisBoard.rollLeft1();
+            updateBoard(thisBoard);
+        }));
+        timeline.setCycleCount(3);
+        timeline.play();
+        Button[][] thisTileList = this.tileList;
+
+        timeline.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                thisBoard.generateRandom();
+                updateCurScore();
+                updateBoard(thisBoard);
+
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 4; j++) {
+
+                        Button currentTile = thisTileList[i][j];
+                        //Rotate rotationTransform = new Rotate(45);
+                        //currentTile.getTransforms().add(rotationTransform);
+                        RotateTransition rt = new RotateTransition(Duration.millis(0.01), currentTile);
+                        rt.setByAngle(-90);
+                        rt.setAutoReverse(true);
+                        rt.play();
+                    }
+                }
+            }
+        });
+    }
+
     public void level2(){
         thisBoard.resetStatus();
         setLevel("Level 2");
+        //rotateBoard();
+        gravity();
         this.curLevelDisplay.setText(getLevel());
+        addKeyHandler();
     }
 
     private void addKeyHandler () {
@@ -467,6 +529,7 @@ public class Gamepage extends Application{
             }
             return true;
         }
+
 
 
         public void displayLost(){

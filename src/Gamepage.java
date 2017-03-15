@@ -359,6 +359,16 @@ public class Gamepage extends Application{
                         } if (this.highestScore == 1024) {
                             gravity();
                         }
+                    } else if (getLevel() == "Level 3") {
+                        if (this.highestScore == 32) {
+                            System.out.println("this.highestScore: " + this.highestScore);
+
+                            gravitySubtract();
+                        } if (this.highestScore == 256) {
+                            gravitySubtract();
+                        } if (this.highestScore == 1024) {
+                            gravitySubtract();
+                        }
                     }
                 }
 
@@ -441,8 +451,27 @@ public class Gamepage extends Application{
 
         level2();
     }
+    // This function plays level 2
+    public void level2(){
+        thisBoard.resetStatus();
+        setLevel("Level 2");
+        this.curLevelDisplay.setText(getLevel());
+        addKeyHandler();
+    }
 
+    public void playLevel3() {
+        drawInitialBoard();
 
+        level3();
+    }
+
+    // This function plays level 3
+    public void level3() {
+        thisBoard.resetStatus();
+        setLevel("Level 3");
+        this.curLevelDisplay.setText(getLevel());
+        addKeyHandler();
+    }
     /*
     Gravity function is called in level 2 and 3.
     When users reach 32, 256 or 1024, the board rotates for 90 degrees, and the tiles drop down, as if they are pulled
@@ -505,12 +534,51 @@ public class Gamepage extends Application{
         });
     }
 
-    // This function plays level 2
-    public void level2(){
-        thisBoard.resetStatus();
-        setLevel("Level 2");
-        this.curLevelDisplay.setText(getLevel());
-        addKeyHandler();
+    public void gravitySubtract() {
+
+            // The whole board rotates for 90 degrees
+            RotateTransition rt1 = new RotateTransition(Duration.millis(2000), this.boardPane);
+            rt1.setByAngle(-90);
+            rt1.setAutoReverse(false);
+            rt1.play();
+
+            StackPane thisBoardPane = this.boardPane;
+
+            Board newBoard = this.thisBoard;
+
+            rt1.setOnFinished((new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Rotate rotationTransform = new Rotate(90, 600, 260);
+                    thisBoardPane.getTransforms().add(rotationTransform);
+                    newBoard.rotate();
+
+                    updateBoard(newBoard);
+                    System.out.println("Board after rotate");
+                    gravityDropSubtract();
+                }
+            }));
+    }
+
+    public void gravityDropSubtract() {
+        Button[][] thisTileList = this.tileList;
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.2), ev -> {
+            thisBoard.rollDownSubtract1();
+            updateBoard(thisBoard);
+            System.out.println("BOARD AFTER GRAVITY DROP");
+        }));
+
+        timeline.setCycleCount(3);
+        timeline.play();
+
+        timeline.setOnFinished(new EventHandler<ActionEvent>()
+        {@Override
+        public void handle(ActionEvent event) {
+            thisBoard.generateRandom();
+            updateCurScore();
+            updateBoard(thisBoard);
+        }
+        });
     }
 
     // This method takes in the keyboard input of an arrow key, and move the tiles accordingly.
@@ -750,7 +818,7 @@ public class Gamepage extends Application{
                 stage.close();
             }
         }
-    
+
 
         // Display a message when the player reaches 2048
         public void displayWin() {

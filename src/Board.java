@@ -269,6 +269,26 @@ public class Board {
         }
     }
 
+    public void rollDownSubtract1(){
+        rollOnerowDownSubtract(gridList[2][0]);
+        rollOnerowDownSubtract(gridList[2][1]);
+        rollOnerowDownSubtract(gridList[2][2]);
+        rollOnerowDownSubtract(gridList[2][3]);
+
+    }
+
+    private void rollOnerowDownSubtract(Grid startGrid) {
+        int x = startGrid.getxLocation();
+        int y = startGrid.getyLocation();
+        while (x >= 0) {
+            this.score += startGrid.subtract(this.gridList[x + 1][y]);
+            if (x > 0) {
+                startGrid = this.gridList[x - 1][y];
+            }
+            x = x - 1;
+        }
+    }
+
     public double getScore() {
         return this.score;
     }

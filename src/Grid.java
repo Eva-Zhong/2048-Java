@@ -56,12 +56,13 @@ public class Grid {
             return 0;
         }
         // if these grids are the same, merge
-        if (mergeGrid.getNumber() == this.number && (!mergeGrid.getIsMerged())) {
+        if (mergeGrid.getNumber() == this.number && (!mergeGrid.getIsMerged())&& (!this.getIsMerged())) {
             mergeGrid.setNumber(this.number * 2);
             this.setIsMerged(false);
             mergeGrid.setIsMerged(true);
             this.setNumber(0);
             this.setDisplay(false);
+            System.out.println("merging grid"+ mergeGrid.getNumber()*2);
             return mergeGrid.getNumber()*2;
         }
         // if merge grid is empty, move this grid into the merge grid
@@ -71,6 +72,7 @@ public class Grid {
             this.setDisplay(false);
             this.setNumber(0);
             mergeGrid.setIsMerged(false);
+            this.setIsMerged(false);
             // return 0.01 to indicate there is a possible move in playable().
             return 0.000001;
         }

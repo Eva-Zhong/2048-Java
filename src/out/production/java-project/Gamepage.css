@@ -1,0 +1,134 @@
+.root {
+    /*-fx-background-image: url("Fantasy-Sky-Step2d.jpg");
+    -fx-background-color: #f2c615;
+    */
+    -fx-background-image: url("outer-space-wallpaper-4351-4405-hd-wallpapers.jpg");
+    -fx-background-color:
+            linear-gradient(to bottom right, #ddc500, #fff8d2);
+}
+
+.newtile {
+
+    -fx-font-size: 15px;
+    -fx-background-color: rgba(150,180,210,0.6);
+
+}
+
+#score {
+    -fx-font-size: 24px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: normal;
+    -fx-fill: #fff8d2;
+    -fx-background-radius: 10;
+    -fx-text-alignment: center;
+ }
+
+#displayLevel{
+    -fx-font-size: 24px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: normal;
+    -fx-fill: #fff8d2;
+}
+
+#newGameButton{
+    -fx-font-size: 20px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: bold;
+    -fx-text-fill: #fbfbfb;
+    -fx-background-radius: 10;
+    -fx-background-color:  rgba(150,180,210,0.6);
+}
+
+#newGameButton:hover{
+	-fx-background-color: lightgray;
+	-fx-text-fill: midnightblue;
+	-fx-font-weight:bold;
+}
+
+#gametitle {
+    -fx-font-size: 54px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: bold;
+    -fx-fill: rgba(122, 122, 0, 0.4);
+    -fx-text-fill: #fbfbfb;
+    -fx-background-radius: 10;
+    -fx-background-color: rgba(150,180,210,0.6);
+}
+
+#tileLable {
+    -fx-font-size: 30px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: normal;
+}
+
+
+
+
+
+
+.rectangle {
+    -fx-background-color: rgba(230,200,40,0.5)
+}
+
+#2 {
+	-fx-background-color: rgba(180,130,180,0.3);
+}
+
+#4 {
+	-fx-background-color: rgba(227,172,129,0.3);
+}
+
+#8 {
+	-fx-background-color: rgba(220,230,129,0.3);
+}
+
+#16 {
+	-fx-background-color: rgba(129,195,230,0.3);
+}
+
+#32 {
+	-fx-background-color: rgba(165,219,138,0.3);
+}
+
+#64 {
+	-fx-background-color: rgba(230,129,224,0.3);
+}
+
+#128 {
+	-fx-background-color: rgba(129,161,227,0.3);
+}
+
+#256{
+	-fx-background-color: rgba(129,227,199,0.3);
+}
+
+#512{
+	-fx-background-color: rgba(225,182,204,0.3);
+}
+
+#1024{
+	-fx-background-color: rgba(182,192,255,0.3);
+}
+
+#2048{
+	-fx-background-color: rgba(129,227,199,0.3);
+}
+
+#4096{
+	-fx-background-color: rgba(225,176,199,0.3);
+}
+
+
+
+/*
+.button {
+    -fx-font-size: 20px;
+    -fx-font-family: "Palatino";
+    -fx-font-weight: bold;
+    -fx-text-fill: #fbfbfb;
+    -fx-background-radius: 10;
+    -fx-background-color: rgba(245,216,88,0.5);
+}
+*/
+
+

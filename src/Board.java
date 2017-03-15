@@ -246,6 +246,8 @@ public class Board {
             System.out.println(row);
         }
     }
+
+
     // This function check the board is full and set all grid status back to not merged.
     public boolean isFull() {
         int count = 0;

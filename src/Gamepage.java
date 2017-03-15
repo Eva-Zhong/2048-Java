@@ -36,7 +36,7 @@ public class Gamepage extends Application{
 
     private Button[][] tileList = new Button[4][4];
     private Board thisBoard = new Board();
-    private String highestScore = "2";
+    private int highestScore = 2;
     //If the user have a tile with number 2048, the highestScore will be updated to "2048", and an alert message will occur.
 
     private Stage stage;
@@ -72,7 +72,7 @@ public class Gamepage extends Application{
         stage.setScene(scene);
         stage.show();
 
-        if (this.highestScore == "2048") {
+        if (this.highestScore == 2048) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             DialogPane dialog = alert.getDialogPane();
             dialog.getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
@@ -112,7 +112,6 @@ public class Gamepage extends Application{
     }
 
     public Stage getStage() {
-        System.out.println("Getstage Called");
         BorderPane root = new BorderPane();
 
         root.setCenter(this.boardPane);
@@ -126,6 +125,7 @@ public class Gamepage extends Application{
         stage.setTitle("GAME 2048");
         stage.setScene(scene);
         stage.show();
+
         return stage;
     }
 
@@ -233,17 +233,31 @@ public class Gamepage extends Application{
                 int currentNum = currentGrid.getNumber();
 
                 Button currentTile = this.tileList[i][j];
-                
+
                 String stringCurrentNum = Integer.toString(currentNum);
                 currentTile.setId(stringCurrentNum);
                 currentTile.setText(stringCurrentNum);
                 if (currentGrid.getDisplay() == true) {
                     currentTile.setStyle("-fx-font-size: 40px; -fx-font-family: 'Palatino'; -fx-text-fill: #fbfbfb");
 
-                } if (currentGrid.getDisplay() == false) {
+                } else if (currentGrid.getDisplay() == false) {
                     currentTile.setStyle("-fx-background-color: rgba(245, 216, 88, 0.0)");
                 }
+
+                    if (currentNum > this.highestScore) {
+                        this.highestScore = currentNum;
+                        System.out.println("highestScore: " + this.highestScore);
+                         if (this.highestScore == 16) {
+                                System.out.println("this.highestScore: " + this.highestScore);
+                                gravity();
+                         }
+                    }
+
             }
+        }
+        System.out.println("this highest score: "+ this.highestScore);
+        if (this.highestScore == 16) {
+                displayLost();
         }
     }
 
@@ -291,6 +305,15 @@ public class Gamepage extends Application{
         this.thisBoard.generateRandom();
         updateBoard(this.thisBoard);
     }
+    public void playGame(){
+        if (getLevel() == "Level 1") {
+            level1();
+        } else if (getLevel() == "Level 2") {
+            level2();
+        } else if (getLevel() == "Level 3") {
+            //level3();
+        }
+    }
 
     public void playLevel1() {
         
@@ -307,6 +330,7 @@ public class Gamepage extends Application{
         this.curLevelDisplay.setText(getLevel());
 
         addKeyHandler();
+
     }
 
     public void playLevel2() {
@@ -317,21 +341,25 @@ public class Gamepage extends Application{
 
     public void gravity() {
 
-        RotateTransition rt1 = new RotateTransition(Duration.millis(3000), this.boardPane);
+        RotateTransition rt1 = new RotateTransition(Duration.millis(2000), this.boardPane);
         rt1.setByAngle(-90);
         rt1.setAutoReverse(false);
         rt1.play();
 
         StackPane thisBoardPane = this.boardPane;
+
         Board newBoard = this.thisBoard;
-        newBoard.rotate();
 
         rt1.setOnFinished((new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Rotate rotationTransform = new Rotate(90, 600, 260);
                 thisBoardPane.getTransforms().add(rotationTransform);
+                newBoard.rotate();
+
                 updateBoard(newBoard);
+                System.out.println("Board after rotate");
+                newBoard.printBoard();
                 gravityDrop();
             }
         }));
@@ -432,11 +460,11 @@ public class Gamepage extends Application{
 
     public void gravityDrop() {
         Button[][] thisTileList = this.tileList;
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.3), ev -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.2), ev -> {
             thisBoard.rollDown1();
-            System.out.println("ROLL DOWN");
             updateBoard(thisBoard);
-            System.out.println("updateBoard");
+            System.out.println("BOARD AFTER GRAVITY DROP");
+            thisBoard.printBoard();
         }));
 
         timeline.setCycleCount(3);
@@ -507,10 +535,13 @@ public class Gamepage extends Application{
     public void level2(){
         thisBoard.resetStatus();
         setLevel("Level 2");
-        gravity();
         //gravity();
         this.curLevelDisplay.setText(getLevel());
         addKeyHandler();
+
+        //if (this.highestScore == 16) {
+        //    gravity();
+        //}
     }
 
     private void addKeyHandler () {
@@ -536,7 +567,7 @@ public class Gamepage extends Application{
                                 return;
                             }
                         }
-                        level1();
+                        playGame();
                         return;
                     }
 
@@ -554,7 +585,7 @@ public class Gamepage extends Application{
                             updateBoard(thisBoard);
                         }
                     });
-                    level1();
+                    playGame();
 
                 } else if (keyCode == KeyCode.UP) {
                     int score = (int) thisBoard.getScore();
@@ -570,7 +601,7 @@ public class Gamepage extends Application{
                                 return;
                             }
                         }
-                        level1();
+                        playGame();
                         return;
                     }
                     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
@@ -587,7 +618,7 @@ public class Gamepage extends Application{
                             updateBoard(thisBoard);
                         }
                     });
-                    level1();
+                    playGame();
 
                 } else if (keyCode == KeyCode.LEFT) {
                     int score = (int) thisBoard.getScore();
@@ -603,7 +634,7 @@ public class Gamepage extends Application{
                                 return;
                             }
                         }
-                        level1();
+                        playGame();
                         return;
                     }
 
@@ -623,7 +654,7 @@ public class Gamepage extends Application{
                         }
                     });
 
-                    level1();
+                    playGame();
 
                 } else if (keyCode == KeyCode.RIGHT) {
                     int score = (int) thisBoard.getScore();
@@ -639,7 +670,7 @@ public class Gamepage extends Application{
                                 return;
                             }
                         }
-                        level1();
+                        playGame();
                         return;
                     }
                     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
@@ -657,7 +688,7 @@ public class Gamepage extends Application{
                             updateBoard(thisBoard);
                         }
                     });
-                    level1();
+                    playGame();
                 }
             }
         });
@@ -689,12 +720,42 @@ public class Gamepage extends Application{
             Button newGame = (Button) dialog.lookupButton(ButtonType.OK);
             newGame.setText("New Game");
             //alert.getButtonTypes().setAll(continueGame, newGame);
-            Optional<ButtonType> result = alert.showAndWait();
+            /*Optional<ButtonType> result = alert.showAndWait();
 
             if (ButtonType.OK.equals(result.get())){
                         Stage newstage = mainpage.getStage();
                         newstage.show();
                         stage.close();
+            }*/
+            //newGame.setOnAction();
+            newGame.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Stage newstage = mainpage.getStage();
+                    newstage.show();
+                    stage.close();
+                }
+            });
+        }
+        public void displayWin() {
+            MainPage mainpage = new MainPage();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            DialogPane dialog = alert.getDialogPane();
+            dialog.getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
+            dialog.getStyleClass().add("alert");
+            alert.setTitle("YOU WIN!");
+            dialog.setPrefSize(350,160);
+            alert.setHeaderText(null);
+            alert.setContentText("GOOD GAME!");
+            Button newGame = (Button) dialog.lookupButton(ButtonType.OK);
+            newGame.setText("New Game");
+            //alert.getButtonTypes().setAll(continueGame, newGame);
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (ButtonType.OK.equals(result.get())){
+                Stage newstage = mainpage.getStage();
+                newstage.show();
+                stage.close();
             }
         }
 

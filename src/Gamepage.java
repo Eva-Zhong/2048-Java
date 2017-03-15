@@ -315,7 +315,58 @@ public class Gamepage extends Application{
         level2();
     }
 
-    public void rotateBoard() {
+    public void gravity() {
+
+        RotateTransition rt1 = new RotateTransition(Duration.millis(3000), this.boardPane);
+        rt1.setByAngle(-90);
+        rt1.setAutoReverse(false);
+        rt1.play();
+
+        StackPane thisBoardPane = this.boardPane;
+        Board newBoard = this.thisBoard;
+        newBoard.rotate();
+
+        rt1.setOnFinished((new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Rotate rotationTransform = new Rotate(90, 600, 260);
+                thisBoardPane.getTransforms().add(rotationTransform);
+                updateBoard(newBoard);
+                gravityDrop();
+            }
+        }));
+
+        /*
+        for (int i = 0; i<3; i++) {
+            Node nodeOfBoardPane = this.boardPane.getChildren().get(i);
+
+            if (nodeOfBoardPane instanceof GridPane) {
+                RotateTransition rt1 = new RotateTransition(Duration.millis(3000), this.boardPane);
+                rt1.setByAngle(-90);
+                rt1.setAutoReverse(true);
+                axis = rt1.getAxis();
+                rt1.play();
+
+                Node nodeOfGridPane = ((GridPane) nodeOfBoardPane).getChildren().get(0);
+
+                if (nodeOfGridPane instanceof Rectangle) {
+                    RotateTransition rt1 = new RotateTransition(Duration.millis(3000), this.boardPane);
+                    rt1.setByAngle(-90);
+                    rt1.setAutoReverse(true);
+                    axis = rt1.getAxis();
+                    rt1.play();
+
+                    rt1.setOnFinished((new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            gravityDrop();
+                        }
+                    }));
+
+                }
+            }
+        }
+        /*
         double centerX;
         double centerY;
         Point3D axis;
@@ -347,14 +398,14 @@ public class Gamepage extends Application{
 
                             Button currentTile = this.tileList[a][b];
 
-                            Rotate rotationTransform = new Rotate(90, 600, 260);
+                            //Rotate rotationTransform = new Rotate(90, 600, 260);
                             //currentTile.getTransforms().add(rotationTransform);
                             //Timeline timeline = new Timeline(
                                     //new KeyFrame(Duration.seconds(3)));
                             //Rotate rotationTransform = new Rotate(90, 600, 260);
                             //currentTile.getTransforms().add(rotationTransform);
                             RotateTransition rt = new RotateTransition(Duration.millis(3000), currentTile);
-                            rt.setAxis(axis);
+                            rt.setByAngle(-90);
                             //rt.setAutoReverse(true);
                             rt.play();
                         }
@@ -362,6 +413,7 @@ public class Gamepage extends Application{
                 }
             }
         }
+        */
 
 
 
@@ -377,24 +429,10 @@ public class Gamepage extends Application{
         //this.boardPane.getTransforms().add(rotationTransform);
     }
 
-    public void gravity() {
-
-        Timeline timeline1 = new Timeline(new KeyFrame(Duration.seconds(3), ev -> {
-            rotateBoard();
-            System.out.println("ROTATE BOARD");
-        }));
-        timeline1.play();
-        timeline1.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                gravityDrop();
-            }
-        });
-    }
 
     public void gravityDrop() {
         Button[][] thisTileList = this.tileList;
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.1), ev -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.3), ev -> {
             thisBoard.rollDown1();
             System.out.println("ROLL DOWN");
             updateBoard(thisBoard);
@@ -408,8 +446,9 @@ public class Gamepage extends Application{
         {@Override
         public void handle(ActionEvent event) {
             thisBoard.generateRandom();
-            //updateCurScore();
+            updateCurScore();
             updateBoard(thisBoard);
+            /*
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     Button currentTile = thisTileList[i][j];
@@ -422,6 +461,7 @@ public class Gamepage extends Application{
                     rt.play();
                 }
             }
+            */
         }
         });
     }
@@ -467,7 +507,7 @@ public class Gamepage extends Application{
     public void level2(){
         thisBoard.resetStatus();
         setLevel("Level 2");
-        rotateBoard();
+        gravity();
         //gravity();
         this.curLevelDisplay.setText(getLevel());
         addKeyHandler();

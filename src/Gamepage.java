@@ -266,23 +266,16 @@ public class Gamepage extends Application{
     }
     // If the board is full, we need to test whether this board is playable or not by testing the possiblity of adding 
     // any score. if not, end the game!
-    public boolean playable(){
+    public boolean playable(Board thisBoard){
         double scoreLeft, scoreRight, scoreUp, scoreDown;
-        Board leftBoard = copyBoard(this.thisBoard);
+        Board leftBoard = copyBoard(thisBoard);
         leftBoard.rollLeft();
         scoreLeft = leftBoard.getScore();
-        Board rightBoard = copyBoard(this.thisBoard);
-        rightBoard.rollRight();
-        scoreRight = rightBoard.getScore();
-        Board upBoard = copyBoard(this.thisBoard);
+        Board upBoard = copyBoard(thisBoard);
         upBoard.rollUp();
         scoreUp = upBoard.getScore();
-        Board downBoard = copyBoard(this.thisBoard);
-        downBoard.rollDown();
-        scoreDown = downBoard.getScore();
-        double currentscore = this.thisBoard.getScore();
-        if(scoreLeft == currentscore && scoreDown == currentscore && scoreUp == currentscore && scoreRight == currentscore){
-            System.out.println(scoreDown);
+        double currentscore = thisBoard.getScore();
+        if(scoreLeft == currentscore && scoreUp == currentscore){
             System.out.println(scoreUp);
             System.out.println("currentScore = " + currentscore);
             return false;
@@ -375,19 +368,27 @@ public class Gamepage extends Application{
 
     private void addKeyHandler () {
         Board thisBoard = this.thisBoard;
-        this.scene.setOnKeyPressed( new EventHandler<KeyEvent>() {
+        this.scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
             @Override
+            // this function's API can not be changed, so we have to write codes
+            // inside this function.
             public void handle(KeyEvent e) {
                 KeyCode keyCode = e.getCode();
-                if (keyCode == KeyCode.DOWN){
-                    int score = (int)thisBoard.getScore();
+                if (keyCode == KeyCode.DOWN) {
+                    int score = (int) thisBoard.getScore();
                     double oldScore = score;
                     thisBoard.setScore(oldScore);
                     Board virtualBoard = copyBoard(thisBoard);
                     virtualBoard.rollDown();
                     double newScore = virtualBoard.getScore();
-                    if(!isMoved(oldScore, newScore)){
+                    if (!isMoved(oldScore, newScore)) {
+                        if (thisBoard.isFull()) {
+                            if (!playable(thisBoard)) {
+                                displayLost();
+                                return;
+                            }
+                        }
                         level1();
                         return;
                     }
@@ -406,23 +407,22 @@ public class Gamepage extends Application{
                             updateBoard(thisBoard);
                         }
                     });
+                    level1();
 
-                    if(!thisBoard.isFull()){
-                        level1();
-                    }else{
-                        if (playable()){
-                            level1();
-                        }
-                        else{displayLost();}
-                    }
                 } else if (keyCode == KeyCode.UP) {
-                    int score = (int)thisBoard.getScore();
+                    int score = (int) thisBoard.getScore();
                     double oldScore = score;
                     thisBoard.setScore(oldScore);
                     Board virtualBoard = copyBoard(thisBoard);
                     virtualBoard.rollUp();
                     double newScore = virtualBoard.getScore();
-                    if(!isMoved(oldScore,newScore)){
+                    if (!isMoved(oldScore, newScore)) {
+                        if (thisBoard.isFull()) {
+                            if (!playable(thisBoard)) {
+                                displayLost();
+                                return;
+                            }
+                        }
                         level1();
                         return;
                     }
@@ -440,24 +440,22 @@ public class Gamepage extends Application{
                             updateBoard(thisBoard);
                         }
                     });
-
-                    if(!thisBoard.isFull()){
-                        level1();
-                    }else{
-                        if (playable()){
-                            level1();
-                        }
-                        else{displayLost();}
-                    }
+                    level1();
 
                 } else if (keyCode == KeyCode.LEFT) {
-                    int score = (int)thisBoard.getScore();
+                    int score = (int) thisBoard.getScore();
                     double oldScore = score;
                     thisBoard.setScore(oldScore);
                     Board virtualBoard = copyBoard(thisBoard);
                     virtualBoard.rollLeft();
                     double newScore = virtualBoard.getScore();
-                    if(!isMoved(oldScore,newScore)){
+                    if (!isMoved(oldScore, newScore)) {
+                        if (thisBoard.isFull()) {
+                            if (!playable(thisBoard)) {
+                                displayLost();
+                                return;
+                            }
+                        }
                         level1();
                         return;
                     }
@@ -478,24 +476,22 @@ public class Gamepage extends Application{
                         }
                     });
 
-
-                    if(!thisBoard.isFull()){
-                        level1();
-                    }else{
-                        if (playable()){
-                            level1();
-                        }
-                        else{displayLost();}
-                    }
+                    level1();
 
                 } else if (keyCode == KeyCode.RIGHT) {
-                    int score = (int)thisBoard.getScore();
+                    int score = (int) thisBoard.getScore();
                     double oldScore = score;
                     thisBoard.setScore(oldScore);
                     Board virtualBoard = copyBoard(thisBoard);
                     virtualBoard.rollRight();
                     double newScore = virtualBoard.getScore();
-                    if(!isMoved(oldScore,newScore)){
+                    if (!isMoved(oldScore, newScore)) {
+                        if (thisBoard.isFull()) {
+                            if (!playable(thisBoard)) {
+                                displayLost();
+                                return;
+                            }
+                        }
                         level1();
                         return;
                     }
@@ -514,15 +510,7 @@ public class Gamepage extends Application{
                             updateBoard(thisBoard);
                         }
                     });
-
-                    if(!thisBoard.isFull()){
-                        level1();
-                    }else{
-                        if (playable()){
-                            level1();
-                        }
-                        else{displayLost();}
-                    }
+                    level1();
                 }
             }
         });

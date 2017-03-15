@@ -610,7 +610,7 @@ public class Gamepage extends Application{
                                     thisBoard.generateRandom();
                                     updateCurScore();
                                     updateBoard(thisBoard);
-                                    if (highestScore == 32 && FIRSTTIME == false) {
+                                    if (highestScore == 2048 && FIRSTTIME == false) {
                                         displayWin();
                                         FIRSTTIME = true;
                                     }
@@ -729,28 +729,28 @@ public class Gamepage extends Application{
         }
 
         // Display a message when the player looses the game.
-        public void displayLost(){
+        public void displayLost() {
             MainPage mainpage = new MainPage();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             DialogPane dialog = alert.getDialogPane();
             dialog.getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
             dialog.getStyleClass().add("alert");
-            alert.setTitle("YOU LOST!");
-            dialog.setPrefSize(350,160);
+            alert.setTitle("YOU LOSE");
+            dialog.setPrefSize(350, 160);
             alert.setHeaderText(null);
-            alert.setContentText("GOOD GAME!");
+            alert.setContentText("TRY HARDER");
             Button newGame = (Button) dialog.lookupButton(ButtonType.OK);
             newGame.setText("New Game");
+            //alert.getButtonTypes().setAll(continueGame, newGame);
+            Optional<ButtonType> result = alert.showAndWait();
 
-            newGame.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    Stage newstage = mainpage.getStage();
-                    newstage.show();
-                    stage.close();
-                }
-            });
+            if (ButtonType.OK.equals(result.get())) {
+                Stage newstage = mainpage.getStage();
+                newstage.show();
+                stage.close();
+            }
         }
+    
 
         // Display a message when the player reaches 2048
         public void displayWin() {

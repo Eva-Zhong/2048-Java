@@ -42,7 +42,7 @@ public class MainPage extends Application{
         BorderPane helpRoot = new BorderPane();
         helpRoot.setCenter(helpAddGridPane());
         sceneWelcome = new Scene(welcomeRoot,1200,800);
-        sceneWelcome.getStylesheets().add(MainPage.class.getResource("WelcomePage.css").toExternalForm());
+        sceneWelcome.getStylesheets().add(MainPage.class.getResource("MainPage.css").toExternalForm());
         sceneHelp = new Scene(helpRoot,1200,800);
         sceneHelp.getStylesheets().add(MainPage.class.getResource("Help.css").toExternalForm());
         stage.setTitle("GAME 2048");
@@ -51,13 +51,14 @@ public class MainPage extends Application{
 
     }
 
+    //This method returns the stage of MainPage
     public Stage getStage() {
         BorderPane welcomeRoot = new BorderPane();
         welcomeRoot.setCenter(welcomeAddGridpane());
         BorderPane helpRoot = new BorderPane();
         helpRoot.setCenter(helpAddGridPane());
         sceneWelcome = new Scene(welcomeRoot,1200,800);
-        sceneWelcome.getStylesheets().add(MainPage.class.getResource("WelcomePage.css").toExternalForm());
+        sceneWelcome.getStylesheets().add(MainPage.class.getResource("MainPage.css").toExternalForm());
         sceneHelp = new Scene(helpRoot,1200,800);
         sceneHelp.getStylesheets().add(MainPage.class.getResource("Help.css").toExternalForm());
         stage = new Stage();
@@ -81,6 +82,7 @@ public class MainPage extends Application{
         return gridPane;
     }
 
+
 	//add level buttons to gridpane
     private Node welcomeAddButtons(){
         GridPane buttonPane = new GridPane();
@@ -96,6 +98,7 @@ public class MainPage extends Application{
         return buttonPane;
     }
 
+    //add Level buttons
     private Button createLevelButton(String level){
         Gamepage gamepage = new Gamepage();
         Button button = new Button(level);
@@ -103,6 +106,7 @@ public class MainPage extends Application{
         button.setMinWidth(MIN_BUTTON_WIDTH);
         button.setId(level);
 
+        //if users choose a level, go to the gamepage with that level
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -119,7 +123,8 @@ public class MainPage extends Application{
         return button;
     }
 
-	//game title of welcome page
+
+	//show title of welcome page
     private Node welcomeAddText(){
         FlowPane flowPane = new FlowPane();
         flowPane.setAlignment(Pos.CENTER);
@@ -129,12 +134,14 @@ public class MainPage extends Application{
         return flowPane;
     }
 
+
 	//help button that sets the scene to the help page
     private Node welcomeAddHelp(){
         GridPane helpPane = new GridPane();
         helpPane.setAlignment(Pos.BOTTOM_RIGHT);
         Button help = new Button("Help");
 
+        //if users click help, go to help page
         help.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -148,8 +155,9 @@ public class MainPage extends Application{
         return helpPane;
     }
 
-    //help page scene
-    //may be can use VBox, a node of the center of borderpane
+
+    //Layout of the help page scene;
+
     public Node helpAddGridPane(){
         GridPane grid = new GridPane();
         grid.setVgap(5);
@@ -165,7 +173,7 @@ public class MainPage extends Application{
         return grid;
     }
 
-    //a node of addGridpane
+    //Layout of the help page scene;
     public Node helpAddFlowPaneTop(){
         FlowPane flow = new FlowPane();
         flow.setPrefWrapLength(500);
@@ -173,7 +181,7 @@ public class MainPage extends Application{
         flow.getChildren().addAll(helpAddStackPane(), helpAddHBox1(),helpAddHBox2());
         return flow;
     }
-    
+
     //the return icon button, when pressed, the scene switches back to the welcome page
     public Node helpAddStackPane(){
         StackPane stack = new StackPane();
@@ -187,8 +195,8 @@ public class MainPage extends Application{
         stack.getChildren().addAll(button);
         return stack;
     }
-    
-    //Goal with image
+
+    //Layout of the help page scene; this part explains the goal of the game
     public HBox helpAddHBox1(){
         HBox hbox = new HBox();
         hbox.setSpacing(2);
@@ -201,7 +209,7 @@ public class MainPage extends Application{
         return hbox;
     }
     
-    //Gameover with image
+    //Layout of the help page scene; this part explains Gameover with image
     public HBox helpAddHBox2(){
         HBox hbox = new HBox();
         hbox.setSpacing(2);

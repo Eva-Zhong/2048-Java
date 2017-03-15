@@ -2,9 +2,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -17,10 +17,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.*;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.event.EventHandler;
@@ -28,16 +27,21 @@ import javafx.util.Duration;
 import javafx.scene.transform.Rotate;
 import javafx.animation.RotateTransition;
 
+
 /**
- * Created by zhonge on 3/4/17.
+ * Created by zhonge and zhaom on 3/4/17.
  */
 
 public class Gamepage extends Application{
 
     private Button[][] tileList = new Button[4][4];
     private Board thisBoard = new Board();
-    private int highestScore = 2;
+
     //If the user have a tile with number 2048, the highestScore will be updated to "2048", and an alert message will occur.
+    private int highestScore = 2;
+
+    //If 2048 occurs for the first time, FIRSTTIME will be changed to true.
+    private boolean FIRSTTIME = false;
 
     private Stage stage;
     private Scene scene;
@@ -49,20 +53,20 @@ public class Gamepage extends Application{
     private String curLevel = "Not Set";
     private Text curLevelDisplay = new Text(this.curLevel);
 
+    //the board as an instance variable
     private StackPane boardPane = addBoardPane();
 
 
+    //set the stage for Gamepage;
     @Override
     public void start(Stage primaryStage){
         stage = primaryStage;
         BorderPane root = new BorderPane();
-        //gridBoard = (BorderPane) addBoardPane();
-
 
         root.setCenter(this.boardPane);
         root.setTop(addTopPane());
 
-        printTileList();
+        //printTileList();
 
         this.scene = new Scene(root,1200,800);
 
@@ -71,64 +75,165 @@ public class Gamepage extends Application{
         stage.setTitle("GAME 2048");
         stage.setScene(scene);
         stage.show();
-
-        if (this.highestScore == 2048) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            DialogPane dialog = alert.getDialogPane();
-            dialog.getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
-            dialog.getStyleClass().add("alert");
-            alert.setTitle("CONGRATULATIONS!");
-            dialog.setPrefSize(350,160);
-            alert.setHeaderText(null);
-            alert.setContentText("YOU WIN!");
-            Button continueGame = (Button) dialog.lookupButton(ButtonType.CLOSE);
-            Button newGame = (Button) dialog.lookupButton(ButtonType.OK);
-            continueGame.setText("Continue");
-            newGame.setText("New Game");
-
-            //alert.getButtonTypes().setAll(continueGame, newGame);
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if (ButtonType.CLOSE.equals(result.get())){
-                alert.close();
-            } else if (ButtonType.OK.equals(result.get())){
-                MainPage mainpage = new MainPage();
-                Stage newstage = mainpage.getStage();
-                newstage.show();
-                stage.close();
-            }
-        }
     }
 
+    //Set curLevel as the level chosen by the user
     public void setLevel(String chosenlevel) {
         this.curLevel = chosenlevel;
     }
 
+    //return curLevel
     public String getLevel() {
         return this.curLevel;
     }
+
+    //return the Board object
     public Board getBoard(){
         return this.thisBoard;
     }
 
+    //return the stage of Gamepage
     public Stage getStage() {
         BorderPane root = new BorderPane();
-
         root.setCenter(this.boardPane);
         root.setTop(addTopPane());
-
         this.scene = new Scene(root,1200,800);
-
         this.scene.getStylesheets().add
                 (Gamepage.class.getResource("Gamepage.css").toExternalForm());
+
         stage = new Stage();
         stage.setTitle("GAME 2048");
         stage.setScene(scene);
         stage.show();
-
         return stage;
     }
 
+
+
+    //Layout of Gamepage: this method creates the top part of the game, and updates the current score and the current level.
+    //It also displays the game title, and contain the newgame button.
+    public Node addTopPane() {
+
+        GridPane topPane = new GridPane();
+
+        topPane.setPadding(new Insets(100,10,10,10));
+
+        topPane.setPrefSize(400, 200);
+
+        topPane.setHgap(10);
+        topPane.setVgap(10);
+
+        //Set constraints to the size of the columns
+        ColumnConstraints col1 = new ColumnConstraints(240);
+        ColumnConstraints col2 = new ColumnConstraints(240);
+        topPane.getColumnConstraints().add(0, col1);
+        topPane.getColumnConstraints().add(1, col2);
+
+        //Add the elemets into the topPane.
+        topPane.add(addTitle(), 0, 0);
+        topPane.add(addScoreDisplay(),1 , 0);
+        topPane.add(displayLevel(), 1, 0);
+        topPane.add(newGameButton(), 1, 0);
+
+        //Put the topPane at the bottom of the center of the Border Pane
+        topPane.setAlignment(Pos.BOTTOM_CENTER);
+
+        return topPane;
+    }
+
+    // This method creates the title of the topPane.
+    private Node addTitle() {
+
+        StackPane titlePane = new StackPane();
+        titlePane.setId("titlePane");
+        Button gametitle = new Button("2048");
+        gametitle.setMinHeight(60);
+        gametitle.setMinWidth(220);
+        gametitle.setId("gametitle");
+
+        titlePane.getChildren().add(gametitle);
+
+        titlePane.setAlignment(Pos.CENTER);
+        return titlePane;
+    }
+
+    // This method keeps the current score up-to-date
+    private void updateCurScore() {
+
+        int newScore = (int) this.thisBoard.getScore();
+
+        //Get new score from backend, update curStatus
+        this.curStatus = "Current Score: " + newScore;
+
+        //Update scoreText to display new status
+        this.scoreText.setText(this.curStatus);
+    }
+
+    // This method displays the current score.
+    private Node addScoreDisplay() {
+
+        StackPane scorePane = new StackPane();
+        this.scoreText.setText(this.curStatus);
+        this.scoreText.setId("score");
+
+        scorePane.getChildren().add(this.scoreText);
+        scorePane.setAlignment(this.scoreText, Pos.TOP_LEFT);
+        scorePane.setAlignment(Pos.TOP_CENTER);
+        return scorePane;
+    }
+
+    // This method displays the current level of the game
+    private Node displayLevel() {
+
+        StackPane levelPane = new StackPane();
+        levelPane.setId("levelPane");
+
+        this.curLevelDisplay.setText(this.curLevel);
+
+        this.curLevelDisplay.setId("displayLevel");
+
+        levelPane.getChildren().add(this.curLevelDisplay);
+        levelPane.setAlignment(Pos.BOTTOM_LEFT);
+
+        return levelPane;
+    }
+
+    // This method creates the newgame button.
+    private Node newGameButton() {
+
+        MainPage mainpage = new MainPage();
+
+        StackPane newGamePane = new StackPane();
+        newGamePane.setId("newGamePane");
+
+        Button newGameButton = new Button("New Game");
+        newGameButton.setId("newGameButton");
+
+        newGamePane.getChildren().add(newGameButton);
+
+        newGamePane.setAlignment(Pos.BOTTOM_RIGHT);
+
+        newGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                Stage newstage = mainpage.getStage();
+                newstage.show();
+                stage.close();
+
+            }
+        });
+
+        return newGamePane;
+
+    }
+
+
+
+    //Layout of Gamepage: create the board that contains the background of the board, 16 squares, and 16 buttons.
+    //The background is rectangle;
+    //The squares are in a gridpane;
+    //the 16 buttons are in a separate gridpane;
     public StackPane addBoardPane() {
 
         StackPane board = new StackPane();
@@ -164,8 +269,6 @@ public class Gamepage extends Application{
 
         //add both the background and the grid to the board
         board.getChildren().add(rec);
-
-        //Need a function that initialize the tiles at the beginning;
         board.getChildren().add(boardgrid);
 
         //put the children at the center
@@ -175,17 +278,13 @@ public class Gamepage extends Application{
         board.setAlignment(Pos.BOTTOM_CENTER);
         board.setPadding(new Insets(0,10,20,10));
 
+        //add 16 tiles to the board
         board.getChildren().add(add16Tiles());
-
-
-        //addTiles(grid, "2", 1, 1 );
-
-        //Need a separate function to add tiles
-
 
         return board;
     }
 
+    //add 16 tiles to the boardPane
     private Node add16Tiles() {
         GridPane tileGrid = new GridPane();
         tileGrid.setAlignment(Pos.CENTER);
@@ -203,26 +302,24 @@ public class Gamepage extends Application{
                 newtile.setMinHeight(110);
                 newtile.setStyle("-fx-background-color: rgba(245,216,88,0.0)");
 
-
                 tileGrid.add(newtile, col, row);
 
                 int[] keyList = {row, col};
 
-                //Print array: system.out.println(Arrays.toString(keyList));
-
-                //Put the 16 buttons in a hashmap; each button is associated with a position
-                //this.tileMap.put(keyList, newtile);
-
+                //add the tile object into a list for later use;
                 this.tileList[row][col] = newtile;
-                //int[] thisKey = {1,2};
-
-                //if (Arrays.equals(keyList, thisKey))  {
-                //    System.out.println("true");
                 }
             }
 
         return tileGrid;
     }
+
+
+    /* This method gets updated information from the backend,
+     and update the view of the board by changing the transparency of each tile.
+     By default, each tile is transparent;
+     If it has a non-zero value, we set it as not transparent, so the number will be displayed.
+    */
 
     public void updateBoard(Board aBoard) {
         Grid[][] gridList = aBoard.getGridList();
@@ -234,9 +331,12 @@ public class Gamepage extends Application{
 
                 Button currentTile = this.tileList[i][j];
 
+                //Set ID, text and color of the tile
                 String stringCurrentNum = Integer.toString(currentNum);
                 currentTile.setId(stringCurrentNum);
                 currentTile.setText(stringCurrentNum);
+
+                //if the value of the tile is non-zero, make it not transparent; otherwise, make it as transparent.
                 if (currentGrid.getDisplay() == true) {
                     currentTile.setStyle("-fx-font-size: 40px; -fx-font-family: 'Palatino'; -fx-text-fill: #fbfbfb");
 
@@ -244,30 +344,29 @@ public class Gamepage extends Application{
                     currentTile.setStyle("-fx-background-color: rgba(245, 216, 88, 0.0)");
                 }
 
-                    if (currentNum > this.highestScore) {
-                        this.highestScore = currentNum;
-                        System.out.println("highestScore: " + this.highestScore);
-                         if (this.highestScore == 16) {
-                                System.out.println("this.highestScore: " + this.highestScore);
-                                gravity();
-                         }
+                // update highestNum
+                if (currentNum > this.highestScore) {
+                    this.highestScore = currentNum;
+
+                    // If it's level 2, call gravity() when the user gets to 32, 256, 1024
+                    if (getLevel()=="Level 2") {
+                        if (this.highestScore == 32) {
+                            System.out.println("this.highestScore: " + this.highestScore);
+
+                            gravity();
+                        } if (this.highestScore == 256) {
+                            gravity();
+                        } if (this.highestScore == 1024) {
+                            gravity();
+                        }
                     }
+                }
 
             }
         }
-        System.out.println("this highest score: "+ this.highestScore);
-        if (this.highestScore == 16) {
-                displayLost();
-        }
     }
 
-    public void printTileList(){
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                System.out.println(this.tileList[i][j].getText()); 
-            }
-        }
-    }
+    //Copy the board as a virtual board, to test what will happen if a move is made
     private Board copyBoard(Board copyBoard){
         Board virtualGame = new Board();
         Grid[][] virtualGird = new Grid[4][4];
@@ -281,6 +380,7 @@ public class Gamepage extends Application{
         virtualGame.setScore(copyBoard.getScore());
         return virtualGame;
     }
+
     // If the board is full, we need to test whether this board is playable or not by testing the possiblity of adding 
     // any score. if not, end the game!
     public boolean playable(Board thisBoard){
@@ -299,13 +399,18 @@ public class Gamepage extends Application{
         }
         return true;
     }
+
+    // When the game first starts, display the initial board
     public void drawInitialBoard() {
-        printTileList();
+        //printTileList();
         this.thisBoard.startGame();
         this.thisBoard.generateRandom();
         updateBoard(this.thisBoard);
     }
+
+    // A method that plays the game; call different functions depending on the level chosen.
     public void playGame(){
+        System.out.println("Current Level: "+getLevel());
         if (getLevel() == "Level 1") {
             level1();
         } else if (getLevel() == "Level 2") {
@@ -315,32 +420,37 @@ public class Gamepage extends Application{
         }
     }
 
+    // Draw initial board and play level 1
     public void playLevel1() {
-        
         drawInitialBoard(); 
         level1();
-        
-
-        // If score is 2048, alert.
     }
 
+
+    // Play level1
     public void level1(){
         thisBoard.resetStatus();
         setLevel("Level 1");
         this.curLevelDisplay.setText(getLevel());
-
         addKeyHandler();
-
     }
 
+    // Draw initial board and play level2
     public void playLevel2() {
         drawInitialBoard();
 
         level2();
     }
 
+
+    /*
+    Gravity function is called in level 2 and 3.
+    When users reach 32, 256 or 1024, the board rotates for 90 degrees, and the tiles drop down, as if they are pulled
+    by gravity.
+     */
     public void gravity() {
 
+        // The whole board rotates for 90 degrees
         RotateTransition rt1 = new RotateTransition(Duration.millis(2000), this.boardPane);
         rt1.setByAngle(-90);
         rt1.setAutoReverse(false);
@@ -350,6 +460,13 @@ public class Gamepage extends Application{
 
         Board newBoard = this.thisBoard;
 
+        /* After the board rotates (the view),
+            1. Rotate the board back but does not update this change in the view. This is to make sure that the column
+            index and row index corresponds to the indices in the backend.
+            2. Rotate each tile in the board back.
+            3. Call the backend, and update the board, so the values and positions of the tiles are consistent with
+            the backend.
+        */
         rt1.setOnFinished((new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -359,112 +476,20 @@ public class Gamepage extends Application{
 
                 updateBoard(newBoard);
                 System.out.println("Board after rotate");
-                newBoard.printBoard();
                 gravityDrop();
             }
         }));
-
-        /*
-        for (int i = 0; i<3; i++) {
-            Node nodeOfBoardPane = this.boardPane.getChildren().get(i);
-
-            if (nodeOfBoardPane instanceof GridPane) {
-                RotateTransition rt1 = new RotateTransition(Duration.millis(3000), this.boardPane);
-                rt1.setByAngle(-90);
-                rt1.setAutoReverse(true);
-                axis = rt1.getAxis();
-                rt1.play();
-
-                Node nodeOfGridPane = ((GridPane) nodeOfBoardPane).getChildren().get(0);
-
-                if (nodeOfGridPane instanceof Rectangle) {
-                    RotateTransition rt1 = new RotateTransition(Duration.millis(3000), this.boardPane);
-                    rt1.setByAngle(-90);
-                    rt1.setAutoReverse(true);
-                    axis = rt1.getAxis();
-                    rt1.play();
-
-                    rt1.setOnFinished((new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            gravityDrop();
-                        }
-                    }));
-
-                }
-            }
-        }
-        /*
-        double centerX;
-        double centerY;
-        Point3D axis;
-
-        for (int i = 0; i<3; i++) {
-            Node nodeOfBoardPane = this.boardPane.getChildren().get(i);
-
-            if (nodeOfBoardPane instanceof GridPane) {
-                Node nodeOfGridPane = ((GridPane) nodeOfBoardPane).getChildren().get(0);
-
-                if (nodeOfGridPane instanceof Rectangle) {
-                    RotateTransition rt1 = new RotateTransition(Duration.millis(3000), nodeOfBoardPane);
-                    rt1.setByAngle(-90);
-                    rt1.setAutoReverse(true);
-                    axis = rt1.getAxis();
-                    rt1.play();
-
-                    rt1.setOnFinished((new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            gravityDrop();
-                        }
-                    }));
-
-                } else if (nodeOfGridPane instanceof Button) {
-
-                    for (int a = 0; a < 4; a++) {
-                        for (int b = 0; b < 4; b++) {
-
-                            Button currentTile = this.tileList[a][b];
-
-                            //Rotate rotationTransform = new Rotate(90, 600, 260);
-                            //currentTile.getTransforms().add(rotationTransform);
-                            //Timeline timeline = new Timeline(
-                                    //new KeyFrame(Duration.seconds(3)));
-                            //Rotate rotationTransform = new Rotate(90, 600, 260);
-                            //currentTile.getTransforms().add(rotationTransform);
-                            RotateTransition rt = new RotateTransition(Duration.millis(3000), currentTile);
-                            rt.setByAngle(-90);
-                            //rt.setAutoReverse(true);
-                            rt.play();
-                        }
-                    }
-                }
-            }
-        }
-        */
-
-
-
-        //RotateTransition rotateTransition = new RotateTransition();
-        //rotateTransition.setOnFinished(e -> yourMethod())
-        //rotateTransition.play();
-
-        //RotateTransition rt = new RotateTransition(Duration.millis(3000), this.boardPane);
-        //rt.setByAngle(-90);
-        //rt.setAutoReverse(true);
-        //rt.play();
-        //Rotate rotationTransform = new Rotate(90, 600, 260);
-        //this.boardPane.getTransforms().add(rotationTransform);
     }
 
 
+    // This method creates the effect of the tiles dropping down as if they are pulled by gravity.
+    // It first calls 'rolldown' method of the board class, and then merge the tiles if necessary.
     public void gravityDrop() {
         Button[][] thisTileList = this.tileList;
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.2), ev -> {
             thisBoard.rollDown1();
             updateBoard(thisBoard);
             System.out.println("BOARD AFTER GRAVITY DROP");
-            thisBoard.printBoard();
         }));
 
         timeline.setCycleCount(3);
@@ -476,74 +501,19 @@ public class Gamepage extends Application{
             thisBoard.generateRandom();
             updateCurScore();
             updateBoard(thisBoard);
-            /*
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    Button currentTile = thisTileList[i][j];
-                    //Rotate rotationTransform = new Rotate(90);
-                    //currentTile.getTransforms().add(rotationTransform);
-                    RotateTransition rt = new RotateTransition(Duration.millis(100), currentTile);
-                    rt.setByAngle(90);
-                    System.out.println("rotate tile");
-                    //rt.setAutoReverse(true);
-                    rt.play();
-                }
-            }
-            */
         }
         });
     }
 
-
-
-
-/*
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.01), ev -> {
-
-            thisBoard.rollDown1();
-            System.out.println("ROLL DOWN");
-            updateBoard(thisBoard);
-            System.out.println("updateBoard");
-        }));
-        timeline.setCycleCount(3);
-        timeline.play();
-        timeline.setOnFinished(new EventHandler<ActionEvent>()
-            {@Override
-                public void handle(ActionEvent event) {
-                    thisBoard.generateRandom();
-                    updateCurScore();
-                    updateBoard(thisBoard);
-                        for (int i = 0; i < 4; i++) {
-                            for (int j = 0; j < 4; j++) {
-                                Button currentTile = thisTileList[i][j];
-                                //Rotate rotationTransform = new Rotate(90);
-                                //currentTile.getTransforms().add(rotationTransform);
-                                RotateTransition rt = new RotateTransition(Duration.millis(1), currentTile);
-                                rt.setByAngle(45);
-                                System.out.println("rotate tile");
-                                //rt.setAutoReverse(true);
-                                rt.play();
-                            }
-                        }
-
-                    }
-
-            });
-
-*/
-
+    // This function plays level 2
     public void level2(){
         thisBoard.resetStatus();
         setLevel("Level 2");
-        //gravity();
         this.curLevelDisplay.setText(getLevel());
         addKeyHandler();
-
-        //if (this.highestScore == 16) {
-        //    gravity();
-        //}
     }
 
+    // This method takes in the keyboard input of an arrow key, and move the tiles accordingly.
     private void addKeyHandler () {
         Board thisBoard = this.thisBoard;
         this.scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -560,6 +530,8 @@ public class Gamepage extends Application{
                     Board virtualBoard = copyBoard(thisBoard);
                     virtualBoard.rollDown();
                     double newScore = virtualBoard.getScore();
+
+                    // If no tiles can be moved, display a message that the player loses the game.
                     if (!isMoved(oldScore, newScore)) {
                         if (thisBoard.isFull()) {
                             if (!playable(thisBoard)) {
@@ -571,22 +543,38 @@ public class Gamepage extends Application{
                         return;
                     }
 
+                    // The timeline is called three times; in each call, the tiles are rolled down for only one
+                    // row(or column, depending on the direction), and the view is updated.
+                    // We repete this step for three times to create the effect that the tiles are 'moving'.
                     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
                         thisBoard.rollDown1();
                         updateBoard(thisBoard);
                     }));
                     timeline.setCycleCount(3);
                     timeline.play();
+
+                    // Once we finished rolling the tiles, we check if the highest score has reached 2048.
+                    // if it does, display a message that the player has won.
                     timeline.setOnFinished(new EventHandler<ActionEvent>() {
-                        @Override
                         public void handle(ActionEvent event) {
-                            thisBoard.generateRandom();
-                            updateCurScore();
-                            updateBoard(thisBoard);
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    thisBoard.generateRandom();
+                                    updateCurScore();
+                                    updateBoard(thisBoard);
+                                    if (highestScore == 2048 && FIRSTTIME == false) {
+                                        displayWin();
+                                        FIRSTTIME = true;
+                                    }
+                                }
+                            });
                         }
                     });
+
                     playGame();
 
+                // Check if the tiles can be rolled up
                 } else if (keyCode == KeyCode.UP) {
                     int score = (int) thisBoard.getScore();
                     double oldScore = score;
@@ -604,22 +592,35 @@ public class Gamepage extends Application{
                         playGame();
                         return;
                     }
+
+                    // If the tiles can be rolled up, roll them up (one row each time and repete this step for three times)
                     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
                         thisBoard.rollUp1();
                         updateBoard(thisBoard);
                     }));
                     timeline.setCycleCount(3);
                     timeline.play();
+
+                    // Once finished moving the tiles, check highest score.
                     timeline.setOnFinished(new EventHandler<ActionEvent>() {
-                        @Override
                         public void handle(ActionEvent event) {
-                            thisBoard.generateRandom();
-                            updateCurScore();
-                            updateBoard(thisBoard);
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    thisBoard.generateRandom();
+                                    updateCurScore();
+                                    updateBoard(thisBoard);
+                                    if (highestScore == 32 && FIRSTTIME == false) {
+                                        displayWin();
+                                        FIRSTTIME = true;
+                                    }
+                                }
+                            });
                         }
                     });
                     playGame();
 
+                // Check if the tiles can be rolled left
                 } else if (keyCode == KeyCode.LEFT) {
                     int score = (int) thisBoard.getScore();
                     double oldScore = score;
@@ -638,6 +639,8 @@ public class Gamepage extends Application{
                         return;
                     }
 
+                    // If the tiles can be rolled up, roll them to the left (one column each time and
+                    // repete this step for three times)
                     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
                         thisBoard.rollLeft1();
                         updateBoard(thisBoard);
@@ -646,16 +649,24 @@ public class Gamepage extends Application{
                     timeline.play();
 
                     timeline.setOnFinished(new EventHandler<ActionEvent>() {
-                        @Override
                         public void handle(ActionEvent event) {
-                            thisBoard.generateRandom();
-                            updateCurScore();
-                            updateBoard(thisBoard);
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    thisBoard.generateRandom();
+                                    updateCurScore();
+                                    updateBoard(thisBoard);
+                                    if (highestScore == 2048 && FIRSTTIME == false) {
+                                        displayWin();
+                                        FIRSTTIME = true;
+                                    }
+                                }
+                            });
                         }
                     });
-
                     playGame();
 
+                    // Check if the tiles can be rolled right
                 } else if (keyCode == KeyCode.RIGHT) {
                     int score = (int) thisBoard.getScore();
                     double oldScore = score;
@@ -673,6 +684,9 @@ public class Gamepage extends Application{
                         playGame();
                         return;
                     }
+
+                    // If the tiles can be rolled right, roll them to the right (one column each time and
+                    // repete this step for three times)
                     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), ev -> {
                         thisBoard.rollRight1();
                         updateBoard(thisBoard);
@@ -681,11 +695,19 @@ public class Gamepage extends Application{
                     timeline.play();
 
                     timeline.setOnFinished(new EventHandler<ActionEvent>() {
-                        @Override
                         public void handle(ActionEvent event) {
-                            thisBoard.generateRandom();
-                            updateCurScore();
-                            updateBoard(thisBoard);
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    thisBoard.generateRandom();
+                                    updateCurScore();
+                                    updateBoard(thisBoard);
+                                    if (highestScore == 2048 && FIRSTTIME == false) {
+                                        displayWin();
+                                        FIRSTTIME = true;
+                                    }
+                                }
+                            });
                         }
                     });
                     playGame();
@@ -694,7 +716,8 @@ public class Gamepage extends Application{
         });
     }
 
-
+        // Check if any tiles are moved;
+        // if false is returned, then no tiles will be moved and the view will not be updated
         public boolean isMoved(double oldScore, double newScore){
             System.out.println("oldScore " + oldScore);
             System.out.println("newScore " + newScore);
@@ -705,8 +728,7 @@ public class Gamepage extends Application{
             return true;
         }
 
-
-
+        // Display a message when the player looses the game.
         public void displayLost(){
             MainPage mainpage = new MainPage();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -719,15 +741,7 @@ public class Gamepage extends Application{
             alert.setContentText("GOOD GAME!");
             Button newGame = (Button) dialog.lookupButton(ButtonType.OK);
             newGame.setText("New Game");
-            //alert.getButtonTypes().setAll(continueGame, newGame);
-            /*Optional<ButtonType> result = alert.showAndWait();
 
-            if (ButtonType.OK.equals(result.get())){
-                        Stage newstage = mainpage.getStage();
-                        newstage.show();
-                        stage.close();
-            }*/
-            //newGame.setOnAction();
             newGame.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -737,6 +751,8 @@ public class Gamepage extends Application{
                 }
             });
         }
+
+        // Display a message when the player reaches 2048
         public void displayWin() {
             MainPage mainpage = new MainPage();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -759,189 +775,8 @@ public class Gamepage extends Application{
             }
         }
 
-    //Get a keyboard input from the user; return the input;
-
-    /*
-    private Node addTiles(GridPane grid, String num, int col, int row) {
-        GridPane newGrid = grid;
-        Button atile = new Button(num);
-        atile.setId("tileLable");
-        atile.setMinWidth(110);
-        atile.setMinHeight(110);
-        newGrid.add(atile, col, row);
-
-
-        return newGrid;
-    }
-    */
-
-
-
-
-    //This function creates the top part of the game interface, including the game title,
-    //the current level, and the current score.
-
-
-    public Node addTopPane() {
-
-        GridPane topPane = new GridPane();
-
-        topPane.setPadding(new Insets(100,10,10,10));
-
-        topPane.setPrefSize(400, 200);
-
-        topPane.setHgap(10);
-        topPane.setVgap(10);
-
-        //Set constraints to the size of the columns
-        ColumnConstraints col1 = new ColumnConstraints(240);
-        ColumnConstraints col2 = new ColumnConstraints(240);
-        topPane.getColumnConstraints().add(0, col1);
-        topPane.getColumnConstraints().add(1, col2);
-
-        //Add the elemets into the topPane.
-        topPane.add(addTitle(), 0, 0);
-        topPane.add(addScoreDisplay(),1 , 0);
-        topPane.add(displayLevel(), 1, 0);
-        topPane.add(newGameButton(), 1, 0);
-
-        //Put the topPane at the bottom of the center of the Border Pane
-        topPane.setAlignment(Pos.BOTTOM_CENTER);
-
-        return topPane;
-    }
-
-
-    private Node addTitle() {
-
-            StackPane titlePane = new StackPane();
-            titlePane.setId("titlePane");
-            Button gametitle = new Button("2048");
-            gametitle.setMinHeight(60);
-            gametitle.setMinWidth(220);
-            //Text gametitle = new Text("2048");
-            gametitle.setId("gametitle");
-            //Rectangle rec = new Rectangle (220,100, Color.YELLOW);
-            //rec.setArcWidth(10);
-            //rec.setArcHeight(10);
-
-            //titlePane.getChildren().add(rec);
-            titlePane.getChildren().add(gametitle);
-
-            titlePane.setAlignment(Pos.CENTER);
-
-        return titlePane;
-    }
-
-    private void updateCurScore() {
-
-        int newScore = (int) this.thisBoard.getScore();
-
-        //Get new score from backend, update curStatus
-        this.curStatus = "Current Score: " + newScore;
-
-        //Update scoreText to display new status
-        this.scoreText.setText(this.curStatus);
-
-//        System.out.println(this.scoreText);
-//        System.out.println("newScore: " + newScore);
-//        System.out.println("this.curStatus = " + this.curStatus);
-    }
-
-
-    private Node addScoreDisplay() {
-
-        StackPane scorePane = new StackPane();
-
-        this.scoreText.setText(this.curStatus);
-
-        this.scoreText.setId("score");
-
-        scorePane.getChildren().add(this.scoreText);
-        scorePane.setAlignment(this.scoreText, Pos.TOP_LEFT);
-        scorePane.setAlignment(Pos.TOP_CENTER);
-        return scorePane;
-    }
-
-    //This method either returns the current score,
-    //or notify the user that the 'Gravity' function or 'Substraction' is happening.
-    /*
-    private String getCurrentCondition() {
-        String curCondition = "";
-        //if gravity happens, curCondition = "Gravity";
-        //else if substraction happens, curCondition = "Substraction";
-        //else, return score.
-        if (this.thisBoard.gridList != null){
-            System.out.println("Gridlist null");
-            int currentScore = (int)this.thisBoard.getScore();
-            curCondition = "Current Score: " + currentScore;
-        } else {
-            curCondition = "Current Score: " + "0";
-        }
-        //A function should return the actual current score.
-        return curCondition;
-    }
-    */
-
-
-    private Node displayLevel() {
-
-        StackPane levelPane = new StackPane();
-        levelPane.setId("levelPane");
-
-        //Rectangle rec = new Rectangle (100, 45, Color.YELLOW);
-        //rec.setArcWidth(10);
-        //rec.setArcHeight(10);
-        //Button level = new Button("Level 1");
-
-        this.curLevelDisplay.setText(this.curLevel);
-
-        this.curLevelDisplay.setId("displayLevel");
-
-        //levelPane.getChildren().add(rec);
-        levelPane.getChildren().add(this.curLevelDisplay);
-        levelPane.setAlignment(Pos.BOTTOM_LEFT);
-
-        return levelPane;
-    }
-
-    private String getCurrentLevel() {
-        String curLevel = "level 2";
-        return curLevel;
-    }
-
-
-    private Node newGameButton() {
-
-        MainPage mainpage = new MainPage();
-
-        StackPane newGamePane = new StackPane();
-        newGamePane.setId("newGamePane");
-
-        Button newGameButton = new Button("New Game");
-        newGameButton.setId("newGameButton");
-
-        newGamePane.getChildren().add(newGameButton);
-
-        newGamePane.setAlignment(Pos.BOTTOM_RIGHT);
-
-        newGameButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                Stage newstage = mainpage.getStage();
-                newstage.show();
-                stage.close();
-
-            }
-        });
-
-        return newGamePane;
-
-    }
 
     public static void main(String[] args) {
-
 
     }
 }

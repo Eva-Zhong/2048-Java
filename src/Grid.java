@@ -86,4 +86,37 @@ public class Grid {
         grid.setyLocation(getyLocation());
         return grid;
     }
+    public double subtract(Grid mergeGrid) {
+        if (mergeGrid == null) {
+            System.out.println("merging with null");
+            return 0;
+        }
+        // if this grid is not displayed, stop the merge
+        if (!this.getDisplay()) {
+            return 0;
+        }
+        // if these grids are the same, subtract
+        if (mergeGrid.getNumber() == this.number && (!mergeGrid.getIsMerged()) && (!this.getIsMerged())) {
+            int score = mergeGrid.getNumber();
+            mergeGrid.setNumber(0);
+            this.setIsMerged(false);
+            mergeGrid.setIsMerged(true);
+            this.setNumber(0);
+            this.setDisplay(false);
+            System.out.println("subtracting grid" + 0);
+            return -score*4;
+        }
+        // if merge grid is empty, move this grid into the merge grid
+        if (!mergeGrid.getDisplay()) {
+            mergeGrid.setNumber(this.getNumber());
+            mergeGrid.setDisplay(this.getDisplay());
+            this.setDisplay(false);
+            this.setNumber(0);
+            mergeGrid.setIsMerged(false);
+            this.setIsMerged(false);
+            // return 0.01 to indicate there is a possible move in playable().
+            return 0.000001;
+        }
+        return 0;
+    }
 }

@@ -166,7 +166,6 @@ public class Board {
     public void rotate() {
         int newRow;
         int newCol;
-        int newNum;
 
         Grid[][] newGridList = new Grid[4][4];
 
@@ -200,10 +199,7 @@ public class Board {
         printBoard();
     }
 
-
-
-
-
+    // This method calls rollDown1 for three times to merge the tiles.
     public void rollDown() {
         //roll left twice to avoid special case where these could be two merge happening in one row.
         rollDown1();
@@ -211,6 +207,7 @@ public class Board {
         rollDown1();
     }
 
+    // This method roll every tile by one row.
     public void rollDown1(){
         rollOnerowDown(gridList[2][0]);
         rollOnerowDown(gridList[2][1]);

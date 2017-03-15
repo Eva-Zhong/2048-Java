@@ -4,6 +4,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -315,62 +316,65 @@ public class Gamepage extends Application{
     }
 
     public void rotateBoard() {
+        double centerX;
+        double centerY;
+        Point3D axis;
 
+        for (int i = 0; i<3; i++) {
+            Node nodeOfBoardPane = this.boardPane.getChildren().get(i);
 
+            if (nodeOfBoardPane instanceof GridPane) {
+                Node nodeOfGridPane = ((GridPane) nodeOfBoardPane).getChildren().get(0);
 
-        Timeline timeline2 = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                if (nodeOfGridPane instanceof Rectangle) {
+                    RotateTransition rt1 = new RotateTransition(Duration.millis(3000), nodeOfBoardPane);
+                    rt1.setByAngle(-90);
+                    rt1.setAutoReverse(true);
+                    axis = rt1.getAxis();
+                    rt1.play();
 
-            //rotate the whole board
-            RotateTransition rt2 = new RotateTransition((Duration.seconds(3)), boardPane);
-            rt2.setByAngle(-90);
-            //rt2.setAutoReverse(true);
-            rt2.play();
+                    rt1.setOnFinished((new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            gravityDrop();
+                        }
+                    }));
 
-            //rotate only the background board
-            for (int i = 0; i<3; i++) {
-                Node nodeOfBoardPane = this.boardPane.getChildren().get(i);
+                } else if (nodeOfGridPane instanceof Button) {
 
-                if (nodeOfBoardPane instanceof GridPane) {
-                    Node nodeOfGridPane = ((GridPane) nodeOfBoardPane).getChildren().get(0);
-                    if (nodeOfGridPane instanceof Rectangle) {
-                        RotateTransition rt1 = new RotateTransition(Duration.seconds(0.005), nodeOfBoardPane);
-                        rt1.setByAngle(-90);
-                        rt1.setAutoReverse(true);
-                        rt1.play();
+                    for (int a = 0; a < 4; a++) {
+                        for (int b = 0; b < 4; b++) {
+
+                            Button currentTile = this.tileList[a][b];
+
+                            Rotate rotationTransform = new Rotate(90, 600, 260);
+                            //currentTile.getTransforms().add(rotationTransform);
+                            //Timeline timeline = new Timeline(
+                                    //new KeyFrame(Duration.seconds(3)));
+                            //Rotate rotationTransform = new Rotate(90, 600, 260);
+                            //currentTile.getTransforms().add(rotationTransform);
+                            RotateTransition rt = new RotateTransition(Duration.millis(3000), currentTile);
+                            rt.setAxis(axis);
+                            //rt.setAutoReverse(true);
+                            rt.play();
+                        }
                     }
                 }
             }
-
-        }));
-        timeline2.play();
-
-        timeline2.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //rotate the buttons
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        Button currentTile = tileList[i][j];
-                        //Rotate rotationTransform = new Rotate(90);
-                        //currentTile.getTransforms().add(rotationTransform);
-                        RotateTransition rt = new RotateTransition(Duration.seconds(3), currentTile);
-                        rt.setByAngle(90);
-                        //rt.setAutoReverse(true);
-                        rt.play();
-                    }
-                }
-            }
-        });
+        }
 
 
 
+        //RotateTransition rotateTransition = new RotateTransition();
+        //rotateTransition.setOnFinished(e -> yourMethod())
+        //rotateTransition.play();
 
-        /*rt.setOnFinished((new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                gravityDrop();
-            }
-        }));*/
+        //RotateTransition rt = new RotateTransition(Duration.millis(3000), this.boardPane);
+        //rt.setByAngle(-90);
+        //rt.setAutoReverse(true);
+        //rt.play();
+        //Rotate rotationTransform = new Rotate(90, 600, 260);
+        //this.boardPane.getTransforms().add(rotationTransform);
     }
 
     public void gravity() {
@@ -390,7 +394,7 @@ public class Gamepage extends Application{
 
     public void gravityDrop() {
         Button[][] thisTileList = this.tileList;
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.1), ev -> {
             thisBoard.rollDown1();
             System.out.println("ROLL DOWN");
             updateBoard(thisBoard);
@@ -406,7 +410,7 @@ public class Gamepage extends Application{
             thisBoard.generateRandom();
             //updateCurScore();
             updateBoard(thisBoard);
-            /*for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     Button currentTile = thisTileList[i][j];
                     //Rotate rotationTransform = new Rotate(90);
@@ -417,7 +421,7 @@ public class Gamepage extends Application{
                     //rt.setAutoReverse(true);
                     rt.play();
                 }
-            }*/
+            }
         }
         });
     }
@@ -463,8 +467,8 @@ public class Gamepage extends Application{
     public void level2(){
         thisBoard.resetStatus();
         setLevel("Level 2");
-        //rotateBoard();
-        gravity();
+        rotateBoard();
+        //gravity();
         this.curLevelDisplay.setText(getLevel());
         addKeyHandler();
     }

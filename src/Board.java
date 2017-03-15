@@ -28,7 +28,6 @@ public class Board {
                 gridList[i][j] = grid;
             }
         }
-
         Random initalGrids = new Random();
         int count = 0;
         while (count < 1) {
@@ -43,13 +42,9 @@ public class Board {
                 grid.setyLocation(y);
                 gridList[x][y] = grid;
                 count++;
-
-                System.out.println("X: "+x+" Y: "+y+" num: "+grid.getNumber());
-
             }
         }
         setGridList(gridList);
-        printBoard();
     }
 
     // This function generate a random grid in a random location, and assign a number value to the grid.
@@ -79,7 +74,6 @@ public class Board {
             grid.setDisplay(true);
         }
         this.gridList[x][y] = grid;
-        printBoard();
     }
 
     public void rollLeft() {
@@ -142,7 +136,6 @@ public class Board {
         rollUp1();
     }
 
-
     public void rollUp1() {
         rollOnerowUp(gridList[1][0]);
         rollOnerowUp(gridList[1][1]);
@@ -161,48 +154,8 @@ public class Board {
             x = x + 1;
         }
     }
-
-
-    public void rotate() {
-        int newRow;
-        int newCol;
-        int newNum;
-
-        Grid[][] newGridList = new Grid[4][4];
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                Grid newGrid = new Grid();
-
-                int curNum = gridList[i][j].getNumber();
-                {
-                    newCol = i;
-                    newRow = 3 - j;
-
-                    newGrid.setxLocation(newRow);
-                    newGrid.setyLocation(newCol);
-                    newGrid.setNumber(curNum);
-                    if (curNum != 0) {
-                        newGrid.setDisplay(true);
-                    } else {
-                        newGrid.setDisplay(false);
-                    }
-                    newGridList[newRow][newCol] = newGrid;
-
-                } /*else {
-
-                    newGrid.setDisplay(false);
-                }*/
-            }
-        }
-        this.gridList = newGridList;
-        System.out.println("Rotate Board");
-        printBoard();
-    }
-
-
-
-
+    
+    
 
     public void rollDown() {
         //roll left twice to avoid special case where these could be two merge happening in one row.
@@ -210,7 +163,7 @@ public class Board {
         rollDown1();
         rollDown1();
     }
-
+    
     public void rollDown1(){
         rollOnerowDown(gridList[2][0]);
         rollOnerowDown(gridList[2][1]);

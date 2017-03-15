@@ -31,18 +31,18 @@ public class Board {
         Random initalGrids = new Random();
         int count = 0;
         while (count < 1) {
-        	int location = initalGrids.nextInt(15);
-        	int x = location / 4;
-        	int y = location % 4;
-        	if (gridList[x][y].getNumber() == 0){
-        		Grid grid = new Grid();
-        		grid.setNumber(2);
-        		grid.setDisplay(true);
-        		grid.setxLocation(x);
-        		grid.setyLocation(y);
-        		gridList[x][y] = grid;
-        		count++;
-        	}
+            int location = initalGrids.nextInt(15);
+            int x = location / 4;
+            int y = location % 4;
+            if (gridList[x][y].getNumber() == 0){
+                Grid grid = new Grid();
+                grid.setNumber(2);
+                grid.setDisplay(true);
+                grid.setxLocation(x);
+                grid.setyLocation(y);
+                gridList[x][y] = grid;
+                count++;
+            }
         }
         setGridList(gridList);
     }
@@ -165,7 +165,7 @@ public class Board {
     }
     
     public void rollDown1(){
-    	rollOnerowDown(gridList[2][0]);
+        rollOnerowDown(gridList[2][0]);
         rollOnerowDown(gridList[2][1]);
         rollOnerowDown(gridList[2][2]);
         rollOnerowDown(gridList[2][3]);

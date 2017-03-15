@@ -251,37 +251,33 @@ public class Gamepage extends Application{
             }
         }
     }
-    private Grid[][] copyBoard(){
+    private Board copyBoard(Board copyBoard){
+        Board virtualGame = new Board();
         Grid[][] virtualGird = new Grid[4][4];
-        Grid[][] girdList = getBoard().getGridList();
+        Grid[][] girdList = copyBoard.getGridList();
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < 4; j++){
                 virtualGird[i][j] = girdList[i][j].clone();
             }
         }
-        return virtualGird;
-    }
-    private Board getVirtualBoard(){
-        Board virtualGame = new Board();
-        Grid[][] virtualGird = copyBoard();
         virtualGame.setGridList(virtualGird);
-        virtualGame.setScore(this.thisBoard.getScore());
+        virtualGame.setScore(copyBoard.getScore());
         return virtualGame;
     }
     // If the board is full, we need to test whether this board is playable or not by testing the possiblity of adding 
     // any score. if not, end the game!
     public boolean playable(){
         double scoreLeft, scoreRight, scoreUp, scoreDown;
-        Board leftBoard = getVirtualBoard();
+        Board leftBoard = copyBoard(this.thisBoard);
         leftBoard.rollLeft();
         scoreLeft = leftBoard.getScore();
-        Board rightBoard = getVirtualBoard();
+        Board rightBoard = copyBoard(this.thisBoard);
         rightBoard.rollRight();
         scoreRight = rightBoard.getScore();
-        Board upBoard = getVirtualBoard();
+        Board upBoard = copyBoard(this.thisBoard);
         upBoard.rollUp();
         scoreUp = upBoard.getScore();
-        Board downBoard = getVirtualBoard();
+        Board downBoard = copyBoard(this.thisBoard);
         downBoard.rollDown();
         scoreDown = downBoard.getScore();
         double currentscore = this.thisBoard.getScore();
@@ -379,15 +375,16 @@ public class Gamepage extends Application{
 
     private void addKeyHandler () {
         Board thisBoard = this.thisBoard;
-        Board virtualBoard = getVirtualBoard();
-        double oldScore = thisBoard.getScore()/1;
-        this.thisBoard.setScore(oldScore);
         this.scene.setOnKeyPressed( new EventHandler<KeyEvent>() {
 
             @Override
             public void handle(KeyEvent e) {
                 KeyCode keyCode = e.getCode();
                 if (keyCode == KeyCode.DOWN){
+                    int score = (int)thisBoard.getScore();
+                    double oldScore = score;
+                    thisBoard.setScore(oldScore);
+                    Board virtualBoard = copyBoard(thisBoard);
                     virtualBoard.rollDown();
                     double newScore = virtualBoard.getScore();
                     if(!isMoved(oldScore, newScore)){
@@ -419,6 +416,10 @@ public class Gamepage extends Application{
                         else{displayLost();}
                     }
                 } else if (keyCode == KeyCode.UP) {
+                    int score = (int)thisBoard.getScore();
+                    double oldScore = score;
+                    thisBoard.setScore(oldScore);
+                    Board virtualBoard = copyBoard(thisBoard);
                     virtualBoard.rollUp();
                     double newScore = virtualBoard.getScore();
                     if(!isMoved(oldScore,newScore)){
@@ -450,6 +451,10 @@ public class Gamepage extends Application{
                     }
 
                 } else if (keyCode == KeyCode.LEFT) {
+                    int score = (int)thisBoard.getScore();
+                    double oldScore = score;
+                    thisBoard.setScore(oldScore);
+                    Board virtualBoard = copyBoard(thisBoard);
                     virtualBoard.rollLeft();
                     double newScore = virtualBoard.getScore();
                     if(!isMoved(oldScore,newScore)){
@@ -484,6 +489,10 @@ public class Gamepage extends Application{
                     }
 
                 } else if (keyCode == KeyCode.RIGHT) {
+                    int score = (int)thisBoard.getScore();
+                    double oldScore = score;
+                    thisBoard.setScore(oldScore);
+                    Board virtualBoard = copyBoard(thisBoard);
                     virtualBoard.rollRight();
                     double newScore = virtualBoard.getScore();
                     if(!isMoved(oldScore,newScore)){
@@ -638,9 +647,9 @@ public class Gamepage extends Application{
         //Update scoreText to display new status
         this.scoreText.setText(this.curStatus);
 
-        System.out.println(this.scoreText);
-        System.out.println("newScore: " + newScore);
-        System.out.println("this.curStatus = " + this.curStatus);
+//        System.out.println(this.scoreText);
+//        System.out.println("newScore: " + newScore);
+//        System.out.println("this.curStatus = " + this.curStatus);
     }
 
 

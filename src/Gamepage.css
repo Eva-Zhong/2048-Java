@@ -2,7 +2,7 @@
     /*-fx-background-image: url("Fantasy-Sky-Step2d.jpg");
     -fx-background-color: #f2c615;
     */
-    -fx-background-image: url("outer-space-wallpaper-4351-4405-hd-wallpapers.jpg");
+    -fx-background-image: url("/images/outer-space-wallpaper-4351-4405-hd-wallpapers.jpg");
     -fx-background-color:
             linear-gradient(to bottom right, #ddc500, #fff8d2);
 }

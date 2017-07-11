@@ -71,7 +71,7 @@ public class Gamepage extends Application{
         this.scene = new Scene(root,1200,800);
 
         this.scene.getStylesheets().add
-                (Gamepage.class.getResource("Gamepage.css").toExternalForm());
+                (Gamepage.class.getResource("styles/Gamepage.css").toExternalForm());
         stage.setTitle("GAME 2048");
         stage.setScene(scene);
         stage.show();
@@ -99,7 +99,7 @@ public class Gamepage extends Application{
         root.setTop(addTopPane());
         this.scene = new Scene(root,1200,800);
         this.scene.getStylesheets().add
-                (Gamepage.class.getResource("Gamepage.css").toExternalForm());
+                (Gamepage.class.getResource("styles/Gamepage.css").toExternalForm());
 
         stage = new Stage();
         stage.setTitle("GAME 2048");
@@ -801,7 +801,7 @@ public class Gamepage extends Application{
             MainPage mainpage = new MainPage();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             DialogPane dialog = alert.getDialogPane();
-            dialog.getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
+            dialog.getStylesheets().add(getClass().getResource("styles/Alert.css").toExternalForm());
             dialog.getStyleClass().add("alert");
             alert.setTitle("YOU LOSE");
             dialog.setPrefSize(350, 160);
@@ -825,7 +825,7 @@ public class Gamepage extends Application{
             MainPage mainpage = new MainPage();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             DialogPane dialog = alert.getDialogPane();
-            dialog.getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
+            dialog.getStylesheets().add(getClass().getResource("styles/Alert.css").toExternalForm());
             dialog.getStyleClass().add("alert");
             alert.setTitle("YOU WIN!");
             dialog.setPrefSize(350,160);

@@ -62,7 +62,6 @@ public class Grid {
             mergeGrid.setIsMerged(true);
             this.setNumber(0);
             this.setDisplay(false);
-            System.out.println("merging grid"+ mergeGrid.getNumber()*2);
             return mergeGrid.getNumber()*2;
         }
         // if merge grid is empty, move this grid into the merge grid
@@ -103,8 +102,7 @@ public class Grid {
             mergeGrid.setIsMerged(true);
             this.setNumber(0);
             this.setDisplay(false);
-            System.out.println("subtracting grid" + 0);
-            return -score*4;
+            return score*4;
         }
         // if merge grid is empty, move this grid into the merge grid
         if (!mergeGrid.getDisplay()) {

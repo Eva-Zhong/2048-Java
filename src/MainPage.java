@@ -42,9 +42,9 @@ public class MainPage extends Application{
         BorderPane helpRoot = new BorderPane();
         helpRoot.setCenter(helpAddGridPane());
         sceneWelcome = new Scene(welcomeRoot,1200,800);
-        sceneWelcome.getStylesheets().add(MainPage.class.getResource("MainPage.css").toExternalForm());
+        sceneWelcome.getStylesheets().add(MainPage.class.getResource("styles/MainPage.css").toExternalForm());
         sceneHelp = new Scene(helpRoot,1200,800);
-        sceneHelp.getStylesheets().add(MainPage.class.getResource("Help.css").toExternalForm());
+        sceneHelp.getStylesheets().add(MainPage.class.getResource("styles/Help.css").toExternalForm());
         stage.setTitle("GAME 2048");
         stage.setScene(sceneWelcome);
         stage.show();
@@ -58,9 +58,9 @@ public class MainPage extends Application{
         BorderPane helpRoot = new BorderPane();
         helpRoot.setCenter(helpAddGridPane());
         sceneWelcome = new Scene(welcomeRoot,1200,800);
-        sceneWelcome.getStylesheets().add(MainPage.class.getResource("MainPage.css").toExternalForm());
+        sceneWelcome.getStylesheets().add(MainPage.class.getResource("styles/MainPage.css").toExternalForm());
         sceneHelp = new Scene(helpRoot,1200,800);
-        sceneHelp.getStylesheets().add(MainPage.class.getResource("Help.css").toExternalForm());
+        sceneHelp.getStylesheets().add(MainPage.class.getResource("styles/Help.css").toExternalForm());
         stage = new Stage();
         stage.setTitle("GAME 2048");
         stage.setScene(sceneWelcome);

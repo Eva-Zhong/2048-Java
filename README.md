@@ -15,4 +15,5 @@
 
 In the third level, to not only plan to turn the board, but also make the tiles with the same value substract from each other. We are still working on this level. 
 
+More detailed descriptions of the game can be found in 'help' in the game. 
 

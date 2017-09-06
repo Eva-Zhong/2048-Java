@@ -11,3 +11,4 @@
 * There are three levels in this game. The first level is the same as the original game. We added additional features in the second and third level (see descriptions). The second level is functional, but we are still developing the third level. 
 
 
+![Alt text](2048images/img1.png?raw=true "Title")
